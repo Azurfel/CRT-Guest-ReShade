@@ -18,260 +18,14 @@
 	You should have received a copy of the GNU General Public License along with this program; if not,
 	write to the Free Software Foundation, Inc, 59 Temple Place - STE 330, Boston, MA 02111-1307, USA.
 
-	Ported to ReShade by DevilSingh with some help from guest(r)
+	Ported to ReShade by DevilSingh with some help from guest(r), and updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
+
+	Parameters reorganized by Azurfel.
 
 */
 
-uniform float filter_res <
-	ui_type = "drag";
-	ui_min = 0.5;
-	ui_max = 8.0;
-	ui_step = 0.1;
-	ui_label = "Horizontal Filtering Resolution";
-> = 1.0;
-
-uniform float speedup <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 4.0;
-	ui_step = 1.0;
-	ui_label = "Speedup w. higher Internal Res.";
-> = 1.0;
-
-uniform float cust_artifacting <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 5.0;
-	ui_step = 0.1;
-	ui_label = "NTSC Custom Artifacting Value";
-> = 1.0;
-
-uniform float cust_fringing <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 5.0;
-	ui_step = 0.1;
-	ui_label = "NTSC Custom Fringing Value";
-> = 1.0;
-
-uniform float ntsc_fields <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 3.0;
-	ui_step = 1.0;
-	ui_label = "NTSC Merge Fields: Auto | No | Yes";
-> = 1.0;
-
-uniform float ntsc_phase <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 5.0;
-	ui_step = 1.0;
-	ui_label = "NTSC Phase: Auto | 2 Phase | 3 Phase | Mixed | PCE";
-> = 1.0;
-
-uniform float ntsc_scale <
-	ui_type = "drag";
-	ui_min = 0.2;
-	ui_max = 2.5;
-	ui_step = 0.025;
-	ui_label = "NTSC Resolution Scaling";
-> = 1.0;
-
-uniform float nscale <
-	ui_type = "drag";
-	ui_min = 0.2;
-	ui_max = 2.5;
-	ui_step = 0.025;
-	ui_label = "NTSC Filter Scaling";
-> = 1.0;
-
-uniform float ntsc_taps <
-	ui_type = "drag";
-	ui_min = 6.0;
-	ui_max = 48.0;
-	ui_step = 1.0;
-	ui_label = "NTSC # of Taps (Filter Width)";
-> = 32.0;
-
-uniform float ntsc_cscale1 <
-	ui_type = "drag";
-	ui_min = 0.5;
-	ui_max = 4.00;
-	ui_step = 0.05;
-	ui_label = "NTSC Chroma Scaling/Bleeding (2 Phase)";
-> = 1.0;
-
-uniform float ntsc_cscale2 <
-	ui_type = "drag";
-	ui_min = 0.2;
-	ui_max = 2.25;
-	ui_step = 0.05;
-	ui_label = "NTSC Chroma Scaling/Bleeding (3 Phase)";
-> = 1.0;
-
-uniform float ntsc_sat <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 2.0;
-	ui_step = 0.01;
-	ui_label = "NTSC Color Saturation";
-> = 1.0;
-
-uniform float ntsc_brt <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.5;
-	ui_step = 0.01;
-	ui_label = "NTSC Brightness";
-> = 1.0;
-
-uniform float ntsc_gamma <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 2.5;
-	ui_step = 0.025;
-	ui_label = "NTSC Filtering Gamma Correction";
-> = 1.0;
-
-uniform float RFNOISE <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 0.01;
-	ui_label = "NTSC RF Noise Frequency";
-> = 0.30;
-
-uniform float RFNOISE1 <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 0.7;
-	ui_step = 0.01;
-	ui_label = "NTSC RF Noise Luma+";
-> = 0.0;
-
-uniform float RFNOISE2 <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 0.7;
-	ui_step = 0.01;
-	ui_label = "NTSC RF Noise Chroma+";
-> = 0.0;
-
-uniform float ntsc_rainbow <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 3.0;
-	ui_step = 1.0;
-	ui_label = "NTSC Coloring/Rainbow Effect (2 Phase)";
-> = 0.0;
-
-uniform float ntsc_ring <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 0.1;
-	ui_label = "NTSC Anti-Ringing";
-> = 0.5;
-
-uniform float ntsc_shrp <
-	ui_type = "drag";
-	ui_min = -10.0;
-	ui_max = 10.0;
-	ui_step = 0.5;
-	ui_label = "NTSC Sharpness (Adaptive)";
-> = 0.0;
-
-uniform float ntsc_fonts <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 1.0;
-	ui_step = 0.01;
-	ui_label = "NTSC Sharpness - Preserve Fonts (0.35 is a Good Spot)";
-> = 0.25;
-
-uniform float ntsc_shpe <
-	ui_type = "drag";
-	ui_min = 0.5;
-	ui_max = 1.0;
-	ui_step = 0.025;
-	ui_label = "NTSC Sharpness Shape";
-> = 0.8;
-
-uniform float ntsc_charp1 <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 10.0;
-	ui_step = 0.5;
-	ui_label = "NTSC Preserve 'Edge' Colors (2 Phase)";
-> = 0.0;
-
-uniform float ntsc_charp2 <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 10.0;
-	ui_step = 0.5;
-	ui_label = "NTSC Preserve 'Edge' Colors (3 Phase)";
-> = 0.0;
-
-uniform float CSHARPEN <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 5.0;
-	ui_step = 0.1;
-	ui_label = "FSharpen - Sharpen Strength";
-> = 0.0;
-
-uniform float CCONTR <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 0.25;
-	ui_step = 0.01;
-	ui_label = "FSharpen - Sharpen (+ Deblur) Contrast";
-> = 0.05;
-
-uniform float CDETAILS <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 0.05;
-	ui_label = "FSharpen - Sharpen Details";
-> = 1.0;
-
-uniform float NDEBLUR <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 8.0;
-	ui_step = 0.25;
-	ui_label = "FSharpen - Deblur Strength";
-> = 1.0;
-
-uniform float DSMART <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 1.0;
-	ui_label = "FSharpen - Smart 'Dithering' Deblur";
-> = 0.0;
-
-uniform float DREDGE <
-	ui_type = "drag";
-	ui_min = 0.7;
-	ui_max = 1.0;
-	ui_step = 0.01;
-	ui_label = "FSharpen - Deblur Edges Falloff";
-> = 0.9;
-
-uniform float DSHARP <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 4.0;
-	ui_step = 0.2;
-	ui_label = "FSharpen - Deblur Extra Sharpen";
-> = 0.0;
-
-
 uniform float bth <
+	ui_category = "Afterglow Settings";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 125.0;
@@ -280,6 +34,7 @@ uniform float bth <
 > = 4.0;
 
 uniform float PR <
+	ui_category = "Afterglow Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.5;
@@ -288,6 +43,7 @@ uniform float PR <
 > = 0.32;
 
 uniform float PG <
+	ui_category = "Afterglow Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.5;
@@ -296,6 +52,7 @@ uniform float PG <
 > = 0.32;
 
 uniform float PB <
+	ui_category = "Afterglow Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.5;
@@ -304,6 +61,7 @@ uniform float PB <
 > = 0.32;
 
 uniform float AS <
+	ui_category = "Afterglow Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.6;
@@ -312,6 +70,7 @@ uniform float AS <
 > = 0.2;
 
 uniform float ST <
+	ui_category = "Afterglow Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -320,6 +79,7 @@ uniform float ST <
 > = 0.5;
 
 uniform float CS <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 5.0;
@@ -328,6 +88,7 @@ uniform float CS <
 > = 0.0;
 
 uniform float CP <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = -1.0;
 	ui_max = 5.0;
@@ -336,6 +97,7 @@ uniform float CP <
 > = 0.0;
 
 uniform float TNTC <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 4.0;
@@ -344,6 +106,7 @@ uniform float TNTC <
 > = 0.0;
 
 uniform float LUTLOW <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 50.0;
@@ -352,6 +115,7 @@ uniform float LUTLOW <
 > = 5.0;
 
 uniform float LUTBR <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -360,6 +124,7 @@ uniform float LUTBR <
 > = 1.0;
 
 uniform float WP <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = -100.0;
 	ui_max = 100.0;
@@ -368,6 +133,7 @@ uniform float WP <
 > = 0.0;
 
 uniform float wp_saturation <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -376,6 +142,7 @@ uniform float wp_saturation <
 > = 1.0;
 
 uniform float pre_bb <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -384,6 +151,7 @@ uniform float pre_bb <
 > = 1.0;
 
 uniform float contra <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = -2.0;
 	ui_max = 2.0;
@@ -392,6 +160,7 @@ uniform float contra <
 > = 0.0;
 
 uniform float pre_gc <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.5;
 	ui_max = 1.75;
@@ -400,6 +169,7 @@ uniform float pre_gc <
 > = 1.0;
 
 uniform float sega_fix <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -408,6 +178,7 @@ uniform float sega_fix <
 > = 0.0;
 
 uniform float BP <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = -100.0;
 	ui_max = 25.0;
@@ -416,6 +187,7 @@ uniform float BP <
 > = 0.0;
 
 uniform float vigstr <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -424,6 +196,7 @@ uniform float vigstr <
 > = 0.0;
 
 uniform float vigdef <
+	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = 0.5;
 	ui_max = 3.0;
@@ -431,39 +204,8 @@ uniform float vigdef <
 	ui_label = "Vignette Size";
 > = 1.0;
 
-uniform float lsmooth <
-	ui_type = "drag";
-	ui_min = 0.5;
-	ui_max = 1.0;
-	ui_step = 0.01;
-	ui_label = "Raster Bloom Effect Smoothing";
-> = 0.7;
-
-uniform float lsdev <
-	ui_type = "drag";
-	ui_min = -0.25;
-	ui_max = 0.25;
-	ui_step = 0.01;
-	ui_label = "Raster Bloom Smoothing Bright Deviation";
-> = 0.0;
-
-uniform float gamma_i <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 5.0;
-	ui_step = 0.05;
-	ui_label = "Gamma Input";
-> = 2.00;
-
-uniform float gamma_o <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 5.0;
-	ui_step = 0.05;
-	ui_label = "Gamma Out";
-> = 1.95;
-
 uniform float interr <
+	ui_category = "Interlacing Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 800.0;
@@ -472,6 +214,7 @@ uniform float interr <
 > = 400.0;
 
 uniform float interm <
+	ui_category = "Interlacing Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 6.0;
@@ -480,6 +223,7 @@ uniform float interm <
 > = 4.0;
 
 uniform float iscanb <
+	ui_category = "Interlacing Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -487,23 +231,8 @@ uniform float iscanb <
 	ui_label = "Interlacing Scanlines Effect (Interlaced Brightness)";
 > = 0.2;
 
-uniform float iscans <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Saturation";
-> = 0.25;
-
-uniform float hiscan <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 1.0;
-	ui_label = "High Resolution Scanlines (Prepend A Scaler)";
-> = 0.0;
-
 uniform float intres <
+	ui_category = "Resolution/Scaling Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 10.0;
@@ -512,6 +241,7 @@ uniform float intres <
 > = 0.0;
 
 uniform float downsample_levelx <
+	ui_category = "Resolution/Scaling Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -520,6 +250,7 @@ uniform float downsample_levelx <
 > = 0.0;
 
 uniform float downsample_levely <
+	ui_category = "Resolution/Scaling Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -527,391 +258,324 @@ uniform float downsample_levely <
 	ui_label = "Downsampling-Y (High-Res Content, Pre-Scalers)";
 > = 0.0;
 
-uniform float HSHARPNESS <
+uniform float iscans <
+	ui_category = "Resolution/Scaling Options";
 	ui_type = "drag";
-	ui_min = 1.0;
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 0.05;
+	ui_label = "Interlacing Scanlines Saturation";
+> = 0.25;
+
+uniform float hiscan <
+	ui_category = "Resolution/Scaling Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "High Resolution Scanlines (Prepend A Scaler)";
+> = 0.0;
+
+uniform float filter_res <
+	ui_category = "Resolution/Scaling Options";
+	ui_type = "drag";
+	ui_min = 0.5;
 	ui_max = 8.0;
-	ui_step = 0.05;
-	ui_label = "Horizontal Filter Range";
-> = 1.6;
-
-uniform float LIGMA_H <
-	ui_type = "drag";
-	ui_min = 0.1;
-	ui_max = 7.0;
-	ui_step = 0.025;
-	ui_label = "Horizontal Blur Sigma";
-> = 0.8;
-
-uniform float S_SHARP <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 3.0;
-	ui_step = 0.05;
-	ui_label = "Substractive Sharpness";
-> = 1.1;
-
-uniform float SHARP <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 2.0;
 	ui_step = 0.1;
-	ui_label = "Sharpness Definition";
-> = 1.2;
+	ui_label = "Horizontal Filtering Resolution";
+> = 1.0;
 
-uniform float MAXS <
+uniform float speedup <
+	ui_category = "Resolution/Scaling Options";
 	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 0.3;
-	ui_step = 0.01;
-	ui_label = "Maximum Sharpness";
-> = 0.18;
-
-uniform float SSRNG <
-	ui_type = "drag";
-	ui_min = 0.0;
+	ui_min = 1.0;
 	ui_max = 4.0;
-	ui_step = 0.05;
-	ui_label = "Substractive Sharpness Ringing";
-> = 0.3;
-
-uniform float m_glow <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 2.0;
 	ui_step = 1.0;
-	ui_label = "Ordinary Glow | Magic Glow";
-> = 0.0;
+	ui_label = "Speedup w. higher Internal Res.";
+> = 1.0;
 
-uniform float m_glow_cutoff <
+uniform float cust_artifacting <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
-	ui_max = 0.4;
-	ui_step = 0.01;
-	ui_label = "Magic Glow Cutoff";
-> = 0.12;
-
-uniform float m_glow_low <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 7.0;
-	ui_step = 0.05;
-	ui_label = "Magic Glow Low Strength";
-> = 0.35;
-
-uniform float m_glow_high <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 7.0;
+	ui_max = 5.0;
 	ui_step = 0.1;
-	ui_label = "Magic Glow High Strength";
-> = 5.0;
-
-uniform float m_glow_dist <
-	ui_type = "drag";
-	ui_min = 0.2;
-	ui_max = 4.0;
-	ui_step = 0.05;
-	ui_label = "Magic Glow Distribution";
+	ui_label = "NTSC Custom Artifacting Value";
 > = 1.0;
 
-uniform float m_glow_mask <
+uniform float cust_fringing <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
-	ui_max = 2.0;
-	ui_step = 0.025;
-	ui_label = "Magic Glow Mask Strength";
-> = 1.0;
-
-uniform float FINE_GAUSS <
-	ui_type = "drag";
-	ui_min = -1.0;
 	ui_max = 5.0;
-	ui_step = 1.0;
-	ui_label = "Fine (Magic) Glow Sampling";
+	ui_step = 0.1;
+	ui_label = "NTSC Custom Fringing Value";
 > = 1.0;
 
-uniform float SIZEH <
+uniform float ntsc_fields <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 1.0;
-	ui_max = 50.0;
-	ui_step = 1.0;
-	ui_label = "Horizontal Glow Radius";
-> = 6.0;
-
-uniform float SIGMA_H <
-	ui_type = "drag";
-	ui_min = 0.2;
-	ui_max = 15.0;
-	ui_step = 0.05;
-	ui_label = "Horizontal Glow Sigma";
-> = 1.2;
-
-uniform float SIZEV <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 50.0;
-	ui_step = 1.0;
-	ui_label = "Vertical Glow Radius";
-> = 6.0;
-
-uniform float SIGMA_V <
-	ui_type = "drag";
-	ui_min = 0.2;
-	ui_max = 15.0;
-	ui_step = 0.05;
-	ui_label = "Vertical Glow Sigma";
-> = 1.2;
-
-uniform float FINE_BLOOM <
-	ui_type = "drag";
-	ui_min = -1.0;
-	ui_max = 5.0;
-	ui_step = 1.0;
-	ui_label = "Fine Bloom/Halation Sampling";
-> = 1.0;
-
-uniform float SIZEX <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 50.0;
-	ui_step = 1.0;
-	ui_label = "Horizontal Bloom/Halation Radius";
-> = 3.0;
-
-uniform float SIGMA_X <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 15.0;
-	ui_step = 0.025;
-	ui_label = "Horizontal Bloom/Halation Sigma";
-> = 0.75;
-
-uniform float SIZEY <
-	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 50.0;
-	ui_step = 1.0;
-	ui_label = "Vertical Bloom/Halation Radius";
-> = 3.0;
-
-uniform float SIGMA_Y <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 15.0;
-	ui_step = 0.025;
-	ui_label = "Vertical Bloom/Halation Sigma";
-> = 0.60;
-
-uniform float glow <
-	ui_type = "drag";
-	ui_min = -2.0;
-	ui_max = 2.0;
-	ui_step = 0.01;
-	ui_label = "(Magic) Glow Strength";
-> = 0.08;
-
-uniform float blm_1 <
-	ui_type = "drag";
-	ui_min = -2.0;
-	ui_max = 2.0;
-	ui_step = 0.05;
-	ui_label = "Bloom Strength";
-> = 0.0;
-
-uniform float b_mask <
-	ui_type = "drag";
-	ui_min = -1.0;
-	ui_max = 1.0;
-	ui_step = 0.025;
-	ui_label = "Bloom Mask Strength";
-> = 0.0;
-
-uniform float mask_bloom <
-	ui_type = "drag";
-	ui_min = -2.0;
-	ui_max = 2.0;
-	ui_step = 0.05;
-	ui_label = "Mask Bloom";
-> = 0.0;
-
-uniform float bloom_dist <
-	ui_type = "drag";
-	ui_min = -2.0;
 	ui_max = 3.0;
-	ui_step = 0.05;
-	ui_label = "Bloom Distribution";
-> = 0.0;
-
-uniform float halation <
-	ui_type = "drag";
-	ui_min = -2.0;
-	ui_max = 2.0;
-	ui_step = 0.025;
-	ui_label = "Halation Strength";
-> = 0.0;
-
-uniform float h_mask <
-	ui_type = "drag";
-	ui_min = -1.0;
-	ui_max = 1.0;
-	ui_step = 0.025;
-	ui_label = "Halation Mask Strength";
-> = 0.35;
-
-uniform float gamma_c <
-	ui_type = "drag";
-	ui_min = 0.5;
-	ui_max = 2.0;
-	ui_step = 0.025;
-	ui_label = "Gamma Correct";
+	ui_step = 1.0;
+	ui_label = "NTSC Merge Fields: Auto | No | Yes";
 > = 1.0;
 
-uniform float gamma_d <
+uniform float ntsc_phase <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 1.0;
-	ui_max = 2.0;
-	ui_step = 0.025;
-	ui_label = "Complementary Gamma Correct";
+	ui_max = 5.0;
+	ui_step = 1.0;
+	ui_label = "NTSC Phase: Auto | 2 Phase | 3 Phase | Mixed | PCE";
 > = 1.0;
 
-uniform float brightboost1 <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 10.0;
-	ui_step = 0.05;
-	ui_label = "Bright Boost Dark Pixels";
-> = 1.4;
-
-uniform float brightboost2 <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 3.0;
-	ui_step = 0.025;
-	ui_label = "Bright Boost Bright Pixels";
-> = 1.1;
-
-uniform float clp <
-	ui_type = "drag";
-	ui_min = -1.0;
-	ui_max = 1.0;
-	ui_step = 0.05;
-	ui_label = "Clip Saturated Color Beams";
-> = 0.0;
-
-uniform float gsl <
-	ui_type = "drag";
-	ui_min = -1.0;
-	ui_max = 2.0;
-	ui_step = 1.0;
-	ui_label = "Scanlines Type";
-> = 0.0;
-
-uniform float scanline1 <
-	ui_type = "drag";
-	ui_min = -20.0;
-	ui_max = 40.0;
-	ui_step = 0.5;
-	ui_label = "Scanlines Beam Shape Center";
-> = 6.0;
-
-uniform float scanline2 <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 70.0;
-	ui_step = 1.0;
-	ui_label = "Scanlines Beam Shape Edges";
-> = 8.0;
-
-uniform float beam_min <
-	ui_type = "drag";
-	ui_min = 0.25;
-	ui_max = 10.0;
-	ui_step = 0.05;
-	ui_label = "Scanlines Shape Dark Pixels";
-> = 1.3;
-
-uniform float beam_max <
+uniform float ntsc_scale <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 0.2;
-	ui_max = 3.5;
+	ui_max = 2.5;
 	ui_step = 0.025;
-	ui_label = "Scanlines Shape Bright Pixels";
+	ui_label = "NTSC Resolution Scaling";
 > = 1.0;
 
-uniform float tds <
+uniform float nscale <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 1.0;
-	ui_label = "Thinner Dark Scanlines";
-> = 0.0;
-
-uniform float beam_size <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 1.0;
-	ui_step = 0.05;
-	ui_label = "Increased Bright Scanlines Beam";
-> = 0.6;
-
-uniform float scans <
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 6.0;
-	ui_step = 0.1;
-	ui_label = "Scanlines Saturation / Mask Falloff";
-> = 0.5;
-
-uniform float scan_falloff <
-	ui_type = "drag";
-	ui_min = 0.1;
-	ui_max = 2.0;
+	ui_min = 0.2;
+	ui_max = 2.5;
 	ui_step = 0.025;
-	ui_label = "Scanlines Falloff";
+	ui_label = "NTSC Filter Scaling";
 > = 1.0;
 
-uniform float spike <
+uniform float ntsc_sat <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
-	ui_step = 0.1;
-	ui_label = "Scanlines Spike Removal";
-> = 1.0;
-
-uniform float scangamma <
-	ui_type = "drag";
-	ui_min = 0.5;
-	ui_max = 5.0;
-	ui_step = 0.05;
-	ui_label = "Scanlines Gamma";
-> = 2.4;
-
-uniform float rolling_scan <
-	ui_type = "drag";
-	ui_min = -1.0;
-	ui_max = 1.0;
 	ui_step = 0.01;
-	ui_label = "Rolling Scanlines";
-> = 0.0;
+	ui_label = "NTSC Color Saturation";
+> = 1.0;
 
-uniform float no_scanlines <
+uniform float ntsc_brt <
+	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.5;
-	ui_step = 0.05;
-	ui_label = "No-Scanlines Mode";
+	ui_step = 0.01;
+	ui_label = "NTSC Brightness";
+> = 1.0;
+
+uniform float ntsc_gamma <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 2.5;
+	ui_step = 0.025;
+	ui_label = "NTSC Filtering Gamma Correction";
+> = 1.0;
+
+uniform float ntsc_rainbow <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 3.0;
+	ui_step = 1.0;
+	ui_label = "NTSC Coloring/Rainbow Effect (2 Phase)";
 > = 0.0;
 
-uniform float IOS <
+uniform float ntsc_taps <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 6.0;
+	ui_max = 48.0;
+	ui_step = 1.0;
+	ui_label = "NTSC # of Taps (Filter Width)";
+> = 32.0;
+
+uniform float ntsc_charp1 <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 10.0;
+	ui_step = 0.5;
+	ui_label = "NTSC Preserve 'Edge' Colors (2 Phase)";
+> = 0.0;
+
+uniform float ntsc_charp2 <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 10.0;
+	ui_step = 0.5;
+	ui_label = "NTSC Preserve 'Edge' Colors (3 Phase)";
+> = 0.0;
+
+uniform float ntsc_cscale1 <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.5;
+	ui_max = 4.00;
+	ui_step = 0.05;
+	ui_label = "NTSC Chroma Scaling/Bleeding (2 Phase)";
+> = 1.0;
+
+uniform float ntsc_cscale2 <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.2;
+	ui_max = 2.25;
+	ui_step = 0.05;
+	ui_label = "NTSC Chroma Scaling/Bleeding (3 Phase)";
+> = 1.0;
+
+uniform float ntsc_ring <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 0.1;
+	ui_label = "NTSC Anti-Ringing";
+> = 0.5;
+
+uniform float ntsc_shrp <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = -10.0;
+	ui_max = 10.0;
+	ui_step = 0.5;
+	ui_label = "NTSC Sharpness (Adaptive)";
+> = 0.0;
+
+uniform float ntsc_fonts <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 1.0;
+	ui_step = 0.01;
+	ui_label = "NTSC Sharpness - Preserve Fonts (0.35 is a Good Spot)";
+> = 0.25;
+
+uniform float ntsc_shpe <
+	ui_category = "NTSC Settings";
+	ui_type = "drag";
+	ui_min = 0.5;
+	ui_max = 1.0;
+	ui_step = 0.025;
+	ui_label = "NTSC Sharpness Shape";
+> = 0.8;
+
+uniform float RFNOISE <
+	ui_category = "RF Noise Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 0.01;
+	ui_label = "NTSC RF Noise Frequency";
+> = 0.30;
+
+uniform float RFNOISE1 <
+	ui_category = "RF Noise Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.7;
+	ui_step = 0.01;
+	ui_label = "NTSC RF Noise Luma+";
+> = 0.0;
+
+uniform float RFNOISE2 <
+	ui_category = "RF Noise Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.7;
+	ui_step = 0.01;
+	ui_label = "NTSC RF Noise Chroma+";
+> = 0.0;
+
+uniform float CSHARPEN <
+	ui_category = "FSharpen";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 5.0;
+	ui_step = 0.1;
+	ui_label = "FSharpen - Sharpen Strength";
+> = 0.0;
+
+uniform float CCONTR <
+	ui_category = "FSharpen";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.25;
+	ui_step = 0.01;
+	ui_label = "FSharpen - Sharpen (+ Deblur) Contrast";
+> = 0.05;
+
+uniform float CDETAILS <
+	ui_category = "FSharpen";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 0.05;
+	ui_label = "FSharpen - Sharpen Details";
+> = 1.0;
+
+uniform float NDEBLUR <
+	ui_category = "FSharpen";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 8.0;
+	ui_step = 0.25;
+	ui_label = "FSharpen - Deblur Strength";
+> = 1.0;
+
+uniform float DSMART <
+	ui_category = "FSharpen";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "FSharpen - Smart 'Dithering' Deblur";
+> = 0.0;
+
+uniform float DREDGE <
+	ui_category = "FSharpen";
+	ui_type = "drag";
+	ui_min = 0.7;
+	ui_max = 1.0;
+	ui_step = 0.01;
+	ui_label = "FSharpen - Deblur Edges Falloff";
+> = 0.9;
+
+uniform float DSHARP <
+	ui_category = "FSharpen";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 4.0;
-	ui_step = 1.0;
-	ui_label = "Integer Scaling: Odd:Y | Even:X+Y";
+	ui_step = 0.2;
+	ui_label = "FSharpen - Deblur Extra Sharpen";
+> = 0.0;
+
+
+uniform float lsmooth <
+	ui_category = "Raster Bloom Options";
+	ui_type = "drag";
+	ui_min = 0.5;
+	ui_max = 1.0;
+	ui_step = 0.01;
+	ui_label = "Raster Bloom Effect Smoothing";
+> = 0.7;
+
+uniform float lsdev <
+	ui_category = "Raster Bloom Options";
+	ui_type = "drag";
+	ui_min = -0.25;
+	ui_max = 0.25;
+	ui_step = 0.01;
+	ui_label = "Raster Bloom Smoothing Bright Deviation";
 > = 0.0;
 
 uniform float OS <
+	ui_category = "Raster Bloom Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -920,6 +584,7 @@ uniform float OS <
 > = 1.0;
 
 uniform float blm_2 <
+	ui_category = "Raster Bloom Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 20.0;
@@ -927,55 +592,458 @@ uniform float blm_2 <
 	ui_label = "Raster Bloom %";
 > = 0.0;
 
-uniform float csize <
+uniform float gamma_i <
+	ui_category = "Gamma Options";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 5.0;
+	ui_step = 0.05;
+	ui_label = "Gamma Input";
+> = 2.00;
+
+uniform float gamma_o <
+	ui_category = "Gamma Options";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 5.0;
+	ui_step = 0.05;
+	ui_label = "Gamma Out";
+> = 1.95;
+
+uniform float HSHARPNESS <
+	ui_category = "Filtering Options";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 8.0;
+	ui_step = 0.05;
+	ui_label = "Horizontal Filter Range";
+> = 1.6;
+
+uniform float LIGMA_H <
+	ui_category = "Filtering Options";
+	ui_type = "drag";
+	ui_min = 0.1;
+	ui_max = 7.0;
+	ui_step = 0.025;
+	ui_label = "Horizontal Blur Sigma";
+> = 0.8;
+
+uniform float S_SHARP <
+	ui_category = "Filtering Options";
 	ui_type = "drag";
 	ui_min = 0.0;
-	ui_max = 0.35;
-	ui_step = 0.01;
-	ui_label = "Corner Size";
-> = 0.0;
+	ui_max = 3.0;
+	ui_step = 0.05;
+	ui_label = "Substractive Sharpness";
+> = 1.1;
 
-uniform float bsize <
+uniform float SHARP <
+	ui_category = "Filtering Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
+	ui_step = 0.1;
+	ui_label = "Sharpness Definition";
+> = 1.2;
+
+uniform float MAXS <
+	ui_category = "Filtering Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.3;
 	ui_step = 0.01;
-	ui_label = "Border Size";
+	ui_label = "Maximum Sharpness";
+> = 0.18;
+
+uniform float SSRNG <
+	ui_category = "Filtering Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 4.0;
+	ui_step = 0.05;
+	ui_label = "Substractive Sharpness Ringing";
+> = 0.3;
+
+uniform float spike <
+	ui_category = "Filtering Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 2.0;
+	ui_step = 0.1;
+	ui_label = "Scanlines Spike Removal";
+> = 1.0;
+
+uniform float m_glow <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 2.0;
+	ui_step = 1.0;
+	ui_label = "Ordinary Glow | Magic Glow";
 > = 0.0;
 
-uniform float sborder <
+uniform float m_glow_cutoff <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.4;
+	ui_step = 0.01;
+	ui_label = "Magic Glow Cutoff";
+> = 0.12;
+
+uniform float m_glow_low <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 7.0;
+	ui_step = 0.05;
+	ui_label = "Magic Glow Low Strength";
+> = 0.35;
+
+uniform float m_glow_high <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 7.0;
+	ui_step = 0.1;
+	ui_label = "Magic Glow High Strength";
+> = 5.0;
+
+uniform float m_glow_dist <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = 0.2;
+	ui_max = 4.0;
+	ui_step = 0.05;
+	ui_label = "Magic Glow Distribution";
+> = 1.0;
+
+uniform float m_glow_mask <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 2.0;
+	ui_step = 0.025;
+	ui_label = "Magic Glow Mask Strength";
+> = 1.0;
+
+uniform float FINE_GAUSS <
+	ui_category = "Magic Glow Settings";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 5.0;
+	ui_step = 1.0;
+	ui_label = "Fine (Magic) Glow Sampling";
+> = 1.0;
+
+uniform float SIZEH <
+	ui_category = "Glow Pass Settings";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 50.0;
+	ui_step = 1.0;
+	ui_label = "Horizontal Glow Radius";
+> = 6.0;
+
+uniform float SIGMA_H <
+	ui_category = "Glow Pass Settings";
+	ui_type = "drag";
+	ui_min = 0.2;
+	ui_max = 15.0;
+	ui_step = 0.05;
+	ui_label = "Horizontal Glow Sigma";
+> = 1.2;
+
+uniform float SIZEV <
+	ui_category = "Glow Pass Settings";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 50.0;
+	ui_step = 1.0;
+	ui_label = "Vertical Glow Radius";
+> = 6.0;
+
+uniform float SIGMA_V <
+	ui_category = "Glow Pass Settings";
+	ui_type = "drag";
+	ui_min = 0.2;
+	ui_max = 15.0;
+	ui_step = 0.05;
+	ui_label = "Vertical Glow Sigma";
+> = 1.2;
+
+uniform float FINE_BLOOM <
+	ui_category = "Bloom/Halation (Glow) Pass Settings";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 5.0;
+	ui_step = 1.0;
+	ui_label = "Fine Bloom/Halation Sampling";
+> = 1.0;
+
+uniform float SIZEX <
+	ui_category = "Bloom/Halation (Glow) Pass Settings";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 50.0;
+	ui_step = 1.0;
+	ui_label = "Horizontal Bloom/Halation Radius";
+> = 3.0;
+
+uniform float SIGMA_X <
+	ui_category = "Bloom/Halation (Glow) Pass Settings";
 	ui_type = "drag";
 	ui_min = 0.25;
-	ui_max = 2.0;
-	ui_step = 0.05;
-	ui_label = "Border Intensity";
+	ui_max = 15.0;
+	ui_step = 0.025;
+	ui_label = "Horizontal Bloom/Halation Sigma";
 > = 0.75;
 
-uniform float barspeed <
+uniform float SIZEY <
+	ui_category = "Bloom/Halation (Glow) Pass Settings";
 	ui_type = "drag";
-	ui_min = 5.0;
-	ui_max = 200.0;
+	ui_min = 1.0;
+	ui_max = 50.0;
 	ui_step = 1.0;
-	ui_label = "Hum Bar Speed";
-> = 50.0;
+	ui_label = "Vertical Bloom/Halation Radius";
+> = 3.0;
 
-uniform float barintensity <
+uniform float SIGMA_Y <
+	ui_category = "Bloom/Halation (Glow) Pass Settings";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 15.0;
+	ui_step = 0.025;
+	ui_label = "Vertical Bloom/Halation Sigma";
+> = 0.60;
+
+uniform float glow <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -2.0;
+	ui_max = 2.0;
+	ui_step = 0.01;
+	ui_label = "(Magic) Glow Strength";
+> = 0.08;
+
+uniform float blm_1 <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -2.0;
+	ui_max = 2.0;
+	ui_step = 0.05;
+	ui_label = "Bloom Strength";
+> = 0.0;
+
+uniform float mask_bloom <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -2.0;
+	ui_max = 2.0;
+	ui_step = 0.05;
+	ui_label = "Mask Bloom";
+> = 0.0;
+
+uniform float bloom_dist <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -2.0;
+	ui_max = 3.0;
+	ui_step = 0.05;
+	ui_label = "Bloom Distribution";
+> = 0.0;
+
+uniform float halation <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -2.0;
+	ui_max = 2.0;
+	ui_step = 0.025;
+	ui_label = "Halation Strength";
+> = 0.0;
+
+uniform float b_mask <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 1.0;
+	ui_step = 0.025;
+	ui_label = "Bloom Mask Strength";
+> = 0.0;
+
+uniform float h_mask <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 1.0;
+	ui_step = 0.025;
+	ui_label = "Halation Mask Strength";
+> = 0.35;
+
+uniform float gamma_c <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = 0.5;
+	ui_max = 2.0;
+	ui_step = 0.025;
+	ui_label = "Gamma Correct";
+> = 1.0;
+
+uniform float gamma_d <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = 1.0;
+	ui_max = 2.0;
+	ui_step = 0.025;
+	ui_label = "Complementary Gamma Correct";
+> = 1.0;
+
+uniform float brightboost1 <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 10.0;
+	ui_step = 0.05;
+	ui_label = "Bright Boost Dark Pixels";
+> = 1.4;
+
+uniform float brightboost2 <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 3.0;
+	ui_step = 0.025;
+	ui_label = "Bright Boost Bright Pixels";
+> = 1.1;
+
+uniform float clp <
+	ui_category = "Brightness Settings";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 1.0;
+	ui_step = 0.05;
+	ui_label = "Clip Saturated Color Beams";
+> = 0.0;
+
+uniform float gsl <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 2.0;
+	ui_step = 1.0;
+	ui_label = "Scanlines Type";
+> = 0.0;
+
+uniform float scanline1 <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = -20.0;
+	ui_max = 40.0;
+	ui_step = 0.5;
+	ui_label = "Scanlines Beam Shape Center";
+> = 6.0;
+
+uniform float scanline2 <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 70.0;
+	ui_step = 1.0;
+	ui_label = "Scanlines Beam Shape Edges";
+> = 8.0;
+
+uniform float beam_min <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 10.0;
+	ui_step = 0.05;
+	ui_label = "Scanlines Shape Dark Pixels";
+> = 1.3;
+
+uniform float beam_max <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.2;
+	ui_max = 3.5;
+	ui_step = 0.025;
+	ui_label = "Scanlines Shape Bright Pixels";
+> = 1.0;
+
+uniform float tds <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "Thinner Dark Scanlines";
+> = 0.0;
+
+uniform float beam_size <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 0.05;
+	ui_label = "Increased Bright Scanlines Beam";
+> = 0.6;
+
+uniform float scans <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 6.0;
+	ui_step = 0.1;
+	ui_label = "Scanlines Saturation / Mask Falloff";
+> = 0.5;
+
+uniform float scan_falloff <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.1;
+	ui_max = 2.0;
+	ui_step = 0.025;
+	ui_label = "Scanlines Falloff";
+> = 1.0;
+
+uniform float scangamma <
+	ui_category = "Scanline Options";
+	ui_type = "drag";
+	ui_min = 0.5;
+	ui_max = 5.0;
+	ui_step = 0.05;
+	ui_label = "Scanlines Gamma";
+> = 2.4;
+
+uniform float rolling_scan <
+	ui_category = "Scanline Options";
 	ui_type = "drag";
 	ui_min = -1.0;
 	ui_max = 1.0;
 	ui_step = 0.01;
-	ui_label = "Hum Bar Intensity";
+	ui_label = "Rolling Scanlines";
 > = 0.0;
 
-uniform float bardir <
+uniform float no_scanlines <
+	ui_category = "Scanline Options";
 	ui_type = "drag";
 	ui_min = 0.0;
-	ui_max = 1.0;
+	ui_max = 1.5;
+	ui_step = 0.05;
+	ui_label = "No-Scanlines Mode";
+> = 0.0;
+
+uniform float IOS <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 4.0;
 	ui_step = 1.0;
-	ui_label = "Hum Bar Direction";
+	ui_label = "Integer Scaling: Odd:Y | Even:X+Y";
 > = 0.0;
 
 uniform float warpx <
+	ui_category = "Screen Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.25;
@@ -984,6 +1052,7 @@ uniform float warpx <
 > = 0.0;
 
 uniform float warpy <
+	ui_category = "Screen Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.25;
@@ -992,6 +1061,7 @@ uniform float warpy <
 > = 0.0;
 
 uniform float c_shape <
+	ui_category = "Screen Options";
 	ui_type = "drag";
 	ui_min = 0.05;
 	ui_max = 0.6;
@@ -1000,6 +1070,7 @@ uniform float c_shape <
 > = 0.25;
 
 uniform float overscanx <
+	ui_category = "Screen Options";
 	ui_type = "drag";
 	ui_min = -200.0;
 	ui_max = 200.0;
@@ -1008,6 +1079,7 @@ uniform float overscanx <
 > = 0.0;
 
 uniform float overscany <
+	ui_category = "Screen Options";
 	ui_type = "drag";
 	ui_min = -200.0;
 	ui_max = 200.0;
@@ -1016,6 +1088,7 @@ uniform float overscany <
 > = 0.0;
 
 uniform float VShift <
+	ui_category = "Screen Options";
 	ui_type = "drag";
 	ui_min = -200.0;
 	ui_max = 200.0;
@@ -1023,7 +1096,62 @@ uniform float VShift <
 	ui_label = "Vertical shift Y original pixels";
 > = 0.0;
 
+uniform float csize <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.35;
+	ui_step = 0.01;
+	ui_label = "Corner Size";
+> = 0.0;
+
+uniform float bsize <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 2.0;
+	ui_step = 0.01;
+	ui_label = "Border Size";
+> = 0.0;
+
+uniform float sborder <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = 0.25;
+	ui_max = 2.0;
+	ui_step = 0.05;
+	ui_label = "Border Intensity";
+> = 0.75;
+
+uniform float barspeed <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = 5.0;
+	ui_max = 200.0;
+	ui_step = 1.0;
+	ui_label = "Hum Bar Speed";
+> = 50.0;
+
+uniform float barintensity <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = -1.0;
+	ui_max = 1.0;
+	ui_step = 0.01;
+	ui_label = "Hum Bar Intensity";
+> = 0.0;
+
+uniform float bardir <
+	ui_category = "Screen Options";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "Hum Bar Direction";
+> = 0.0;
+
 uniform float shadow_msk <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 14.0;
@@ -1032,6 +1160,7 @@ uniform float shadow_msk <
 > = 1.0;
 
 uniform float maskstr <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = -0.5;
 	ui_max = 1.0;
@@ -1040,6 +1169,7 @@ uniform float maskstr <
 > = 0.3;
 
 uniform float mcut <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -1048,6 +1178,7 @@ uniform float mcut <
 > = 1.1;
 
 uniform float maskboost <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 3.0;
@@ -1056,6 +1187,7 @@ uniform float maskboost <
 > = 1.0;
 
 uniform float masksize <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 4.0;
@@ -1064,6 +1196,7 @@ uniform float masksize <
 > = 1.0;
 
 uniform float mask_zoom <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = -10.0;
 	ui_max = 6.0;
@@ -1072,6 +1205,7 @@ uniform float mask_zoom <
 > = 0.0;
 
 uniform float zoom_mask <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1080,6 +1214,7 @@ uniform float zoom_mask <
 > = 0.0;
 
 uniform float mshift <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1088,6 +1223,7 @@ uniform float mshift <
 > = 0.0;
 
 uniform float mask_layout <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1096,6 +1232,7 @@ uniform float mask_layout <
 > = 0.0;
 
 uniform float mask_drk <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -1104,6 +1241,7 @@ uniform float mask_drk <
 > = 0.5;
 
 uniform float mask_lgt <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -1112,6 +1250,7 @@ uniform float mask_lgt <
 > = 1.5;
 
 uniform float mask_gamma <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 5.0;
@@ -1120,6 +1259,7 @@ uniform float mask_gamma <
 > = 2.4;
 
 uniform float slotmask1 <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1128,6 +1268,7 @@ uniform float slotmask1 <
 > = 0.0;
 
 uniform float slotmask2 <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1136,6 +1277,7 @@ uniform float slotmask2 <
 > = 0.0;
 
 uniform float slotwidth <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 16.0;
@@ -1144,6 +1286,7 @@ uniform float slotwidth <
 > = 0.0;
 
 uniform float double_slot <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 4.0;
@@ -1152,6 +1295,7 @@ uniform float double_slot <
 > = 2.0;
 
 uniform float slotms <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 4.0;
@@ -1160,6 +1304,7 @@ uniform float slotms <
 > = 1.0;
 
 uniform float smoothmask <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 2.0;
@@ -1168,6 +1313,7 @@ uniform float smoothmask <
 > = 0.0;
 
 uniform float smask_mit <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1176,6 +1322,7 @@ uniform float smask_mit <
 > = 0.0;
 
 uniform float bmask <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.25;
@@ -1184,6 +1331,7 @@ uniform float bmask <
 > = 0.0;
 
 uniform float mclip <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1192,6 +1340,7 @@ uniform float mclip <
 > = 0.0;
 
 uniform float pr_scan <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1200,6 +1349,7 @@ uniform float pr_scan <
 > = 0.1;
 
 uniform float edgemask <
+	ui_category = "CRT Mask Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1208,6 +1358,7 @@ uniform float edgemask <
 > = 0.0;
 
 uniform float dctypex <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.75;
@@ -1216,6 +1367,7 @@ uniform float dctypex <
 > = 0.0;
 
 uniform float dctypey <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 0.75;
@@ -1224,6 +1376,7 @@ uniform float dctypey <
 > = 0.0;
 
 uniform float deconrx <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = -15.0;
 	ui_max = 15.0;
@@ -1232,6 +1385,7 @@ uniform float deconrx <
 > = 0.0;
 
 uniform float decongx <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = -15.0;
 	ui_max = 15.0;
@@ -1240,6 +1394,7 @@ uniform float decongx <
 > = 0.0;
 
 uniform float deconbx <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = -15.0;
 	ui_max = 15.0;
@@ -1248,6 +1403,7 @@ uniform float deconbx <
 > = 0.0;
 
 uniform float deconry <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = -15.0;
 	ui_max = 15.0;
@@ -1256,6 +1412,7 @@ uniform float deconry <
 > = 0.0;
 
 uniform float decongy <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = -15.0;
 	ui_max = 15.0;
@@ -1264,6 +1421,7 @@ uniform float decongy <
 > = 0.0;
 
 uniform float deconby <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = -15.0;
 	ui_max = 15.0;
@@ -1272,6 +1430,7 @@ uniform float deconby <
 > = 0.0;
 
 uniform float decons <
+	ui_category = "Deconvergence Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 3.0;
@@ -1280,6 +1439,7 @@ uniform float decons <
 > = 1.0;
 
 uniform float addnoised <
+	ui_category = "Noise Options";
 	ui_type = "drag";
 	ui_min = -1.0;
 	ui_max = 1.0;
@@ -1288,6 +1448,7 @@ uniform float addnoised <
 > = 0.0;
 
 uniform float noiseresd <
+	ui_category = "Noise Options";
 	ui_type = "drag";
 	ui_min = 1.0;
 	ui_max = 10.0;
@@ -1296,6 +1457,7 @@ uniform float noiseresd <
 > = 2.0;
 
 uniform float noisetype <
+	ui_category = "Noise Options";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;
@@ -1304,6 +1466,7 @@ uniform float noisetype <
 > = 0.0;
 
 uniform float post_br <
+	ui_category = "Post Effects";
 	ui_type = "drag";
 	ui_min = 0.25;
 	ui_max = 5.0;
@@ -1312,6 +1475,7 @@ uniform float post_br <
 > = 1.0;
 
 uniform float oimage <
+	ui_category = "Post Effects";
 	ui_type = "drag";
 	ui_min = 0.0;
 	ui_max = 1.0;

@@ -24,9 +24,8 @@
 
 	Ported to ReShade by DevilSingh with some help from guest(r).
 	Updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
-	Updated to crt-guest-advanced-2026-07-23-release1 by Jobima and Azurfel.
-
 	Relevant sections decoupled for more granular utility by Azurfel.
+	Updated to crt-guest-advanced-2026-07-23-release1 by Jobima and Azurfel.
 
 */
 

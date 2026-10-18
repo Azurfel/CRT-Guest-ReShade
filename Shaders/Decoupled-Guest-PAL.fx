@@ -24,9 +24,9 @@
 
 	NTSC version ported to ReShade by DevilSingh with some help from guest(r).
 	NTSC version updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
+	Relevant sections decoupled for more granular utility by Azurfel.
 	PAL passes ported to ReShade by Azurfel.
 	Updated to crt-guest-advanced-2026-07-23-release1 by Jobima and Azurfel.
-	Relevant sections decoupled for more granular utility by Azurfel.
 
 */
 

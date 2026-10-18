@@ -668,15 +668,6 @@ uniform float S_SHARP <
 	ui_label = "Substractive Sharpness";
 > = 1.1;
 
-uniform float SHARP <
-	ui_category = "Filtering Options";
-	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 2.0;
-	ui_step = 0.1;
-	ui_label = "Sharpness Definition";
-> = 1.2;
-
 uniform float MAXS <
 	ui_category = "Filtering Options";
 	ui_type = "drag";

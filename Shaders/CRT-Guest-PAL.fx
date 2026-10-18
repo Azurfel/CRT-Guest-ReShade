@@ -383,11 +383,20 @@ uniform float CHROMAF <
 uniform float DLINE <
 	ui_category = "PAL Controls";
 	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 6.0;
+	ui_min = 1.0;
+	ui_max = 4.0;
 	ui_step = 1.00;
 	ui_label = "PAL Delay Line | Merge";
 > = 2.00;
+
+uniform float DLINEsupport <
+	ui_category = "PAL Controls";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.0;
+	ui_step = 0.00;
+	ui_label = "Delay Line Info: 1:OFF  2:Authentic  3:Auth+Merge  4:Merge";
+> = 0.0;
 
 uniform float GCORR <
 	ui_category = "PAL Controls";

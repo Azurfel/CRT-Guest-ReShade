@@ -347,11 +347,11 @@ uniform float cust_fringing <
 uniform float ntsc_fields <
 	ui_category = "NTSC Settings";
 	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 3.0;
+	ui_min = -1.0;
+	ui_max = 1.0;
 	ui_step = 1.0;
 	ui_label = "NTSC Merge Fields: Auto | No | Yes";
-> = 1.0;
+> = -1.0;
 
 uniform float ntsc_phase <
 	ui_category = "NTSC Settings";
@@ -1061,9 +1061,9 @@ float4 Signal_1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float BRIGHTNESS=ntsc_brt;
 	float SATURATION=ntsc_sat;
 	float MERGE=0.0;
-	if(ntsc_fields== 1.0&&phase==3.0) MERGE=1.0;else
-	if(ntsc_fields== 2.0) MERGE=0.0;else
-	if(ntsc_fields== 3.0) MERGE=1.0;
+	if(ntsc_fields== -1.0&&phase==3.0) MERGE=1.0;else
+	if(ntsc_fields== 0.0) MERGE=0.0;else
+	if(ntsc_fields== 1.0) MERGE=1.0;
 	float3x3 mix_m = float3x3(BRIGHTNESS,ARTIFACT,ARTIFACT,FRINGING,2.0*SATURATION,0.0,FRINGING,0.0,2.0*SATURATION);
 	float2 pix_no=vtexcoord*OrgSize.xy*pix_res* float2(4.0,1.0);
 	if (vtexcoord.x > 1.0) return 0.0.xxxx; else

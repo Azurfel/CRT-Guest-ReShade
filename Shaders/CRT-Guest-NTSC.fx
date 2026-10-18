@@ -346,11 +346,11 @@ uniform float cust_fringing <
 uniform float ntsc_fields <
 	ui_category = "NTSC Settings";
 	ui_type = "drag";
-	ui_min = 1.0;
-	ui_max = 3.0;
+	ui_min = -1.0;
+	ui_max = 1.0;
 	ui_step = 1.0;
 	ui_label = "NTSC Merge Fields: Auto | No | Yes";
-> = 1.0;
+> = -1.0;
 
 uniform float ntsc_phase <
 	ui_category = "NTSC Settings";
@@ -1202,11 +1202,11 @@ uniform float bardir <
 uniform float shadow_msk <
 	ui_category = "CRT Mask Options";
 	ui_type = "drag";
-	ui_min = 0.0;
-	ui_max = 15.0;
+	ui_min = -1.0;
+	ui_max = 14.0;
 	ui_step = 1.0;
-	ui_label = "CRT Mask: 1:CGWG | 2-5:Lottes | 6-15:'Trinitron'";
-> = 1.0;
+	ui_label = "CRT Mask: 0:CGWG | 1-4:Lottes | 5-14:'Trinitron'";
+> = 0.0;
 
 uniform float maskstr <
 	ui_category = "CRT Mask Options";
@@ -1214,7 +1214,7 @@ uniform float maskstr <
 	ui_min = -0.5;
 	ui_max = 1.0;
 	ui_step = 0.025;
-	ui_label = "Mask Strength (1, 6-15)";
+	ui_label = "Mask Strength (0, 5-14)";
 > = 0.3;
 
 uniform float mcut <
@@ -1223,7 +1223,7 @@ uniform float mcut <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Mask 6-15 Low Strength";
+	ui_label = "Mask 5-14 Low Strength";
 > = 1.1;
 
 uniform float maskboost <
@@ -1828,7 +1828,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 {
 	float3 mask=mask_drk;
 	float3 one=1.0;
-	if(shadow_msk== 1.0)
+	if(shadow_msk== 0.0)
 	{
 	float mc=1.0-max(maskstr,0.0);
 	pos.x=frac(pos.x*0.5);
@@ -1840,7 +1840,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.r= mc;mask.g=1.0;mask.b= mc;
 	}
 	}else
-	if(shadow_msk== 2.0)
+	if(shadow_msk== 1.0)
 	{
 	float lane=mask_lgt;
 	float odd=0.0;
@@ -1852,14 +1852,14 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.b= mask_lgt;
 	mask*=lane;
 	}else
-	if(shadow_msk== 3.0)
+	if(shadow_msk== 2.0)
 	{
 	pos.x=floor(mod(pos.x,3.0));
 	if(pos.x<0.5)mask.r=mask_lgt;else
 	if(pos.x<1.5)mask.g=mask_lgt;else
 	mask.b= mask_lgt;
 	}else
-	if(shadow_msk== 4.0)
+	if(shadow_msk== 3.0)
 	{
 	pos.x+=pos.y*3.0;
 	pos.x=frac(pos.x/6.0);
@@ -1867,7 +1867,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	if(pos.x<0.6)mask.g=mask_lgt;else
 	mask.b= mask_lgt;
 	}else
-	if(shadow_msk== 5.0)
+	if(shadow_msk== 4.0)
 	{
 	pos.xy=floor(pos.xy*float2(1.0,0.5));
 	pos.x+=pos.y*3.0;
@@ -1876,7 +1876,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	if(pos.x<0.6)mask.g=mask_lgt;else
 	mask.b= mask_lgt;
 	}else
-	if(shadow_msk== 6.0)
+	if(shadow_msk== 5.0)
 	{
 	mask=0.0;
 	pos.x=frac(pos.x/2.0);
@@ -1888,7 +1888,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.g=1.0;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk== 7.0)
+	if(shadow_msk== 6.0)
 	{
 	mask=0.0;
 	pos.x=floor(mod(pos.x,3.0));
@@ -1897,7 +1897,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.b=1.0;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk== 8.0)
+	if(shadow_msk== 7.0)
 	{
 	mask=0.0;
 	pos.x=frac(pos.x/2.0);
@@ -1908,7 +1908,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask=1.0.xxx;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk== 9.0)
+	if(shadow_msk== 8.0)
 	{
 	mask=0.0;
 	pos.x=frac(pos.x/3.0);
@@ -1917,7 +1917,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask=1.0.xxx;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk==10.0)
+	if(shadow_msk== 9.0)
 	{
 	mask=0.0;
 	pos.x=frac(pos.x/3.0);
@@ -1926,7 +1926,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.g=1.0;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk==11.0)
+	if(shadow_msk==10.0)
 	{
 	mask=0.0;
 	pos.x=frac(pos.x*0.25);
@@ -1936,7 +1936,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.b=1.0;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk==12.0)
+	if(shadow_msk==11.0)
 	{
 	mask=0.0;
 	pos.x=frac(pos.x*0.25);
@@ -1945,7 +1945,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	if(pos.x<0.7)mask.gb=1.0.xx;else
 	mask.b=1.0;mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk==13.0)
+	if(shadow_msk==12.0)
 	{
 	mask=0.0;
 	pos.x=floor(mod(pos.x,7.0));
@@ -1955,7 +1955,7 @@ float3 crt_mask(float2 pos,float mx,float mb)
 	mask.b=1.0;
 	mask=clamp(lerp(lerp(one,mask,mcut),lerp(one,mask,maskstr),mx),0.0,1.0);
 	}else
-	if(shadow_msk==14.0)
+	if(shadow_msk==13.0)
 	{
 	mask=0.0;
 	pos.x=floor(mod(pos.x,6.0));
@@ -2343,9 +2343,9 @@ float4 Signal_1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float BRIGHTNESS=ntsc_brt;
 	float SATURATION=ntsc_sat;
 	float MERGE=0.0;
-	if(ntsc_fields== 1.0&&phase==3.0) MERGE=1.0;else
-	if(ntsc_fields== 2.0) MERGE=0.0;else
-	if(ntsc_fields== 3.0) MERGE=1.0;
+	if(ntsc_fields== -1.0&&phase==3.0) MERGE=1.0;else
+	if(ntsc_fields== 0.0) MERGE=0.0;else
+	if(ntsc_fields== 1.0) MERGE=1.0;
 	float3x3 mix_m = float3x3(BRIGHTNESS,ARTIFACT,ARTIFACT,FRINGING,2.0*SATURATION,0.0,FRINGING,0.0,2.0*SATURATION);
 	float2 pix_no=vtexcoord*OrgSize.xy*pix_res* float2(4.0,1.0);
 	if (vtexcoord.x > 1.0) return 0.0.xxxx; else
@@ -3078,7 +3078,7 @@ float4 ChromaticPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float mwidth=mwidths[int(shadow_msk)];
 	float mask_compensate=frac(mwidth);
 	float mwidth0 = mwidth;
-	if(shadow_msk> 0.5)
+	if(shadow_msk> -0.5)
 	{
 	float2 maskcoord= fracoord.xy+float2(laysh*masksize,0.0);
 	float2 scoord=maskcoord;
@@ -3102,10 +3102,10 @@ float4 ChromaticPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float clerp= frac(maskcoord.x/mscale); if( zoom_mask>0.025 )clerp=clamp((1.0+zoom_mask)*clerp-0.5*zoom_mask,0.0,1.0);
 
 	float coord = floor(maskcoord.x/mscale);
-	if (shadow_msk == 13.0 && mask_zoom == -2.0) coord = ceil(maskcoord.x/mscale);
+	if (shadow_msk == 12.0 && mask_zoom == -2.0) coord = ceil(maskcoord.x/mscale);
 	cmask = lerp(crt_mask(float2(coord,maskcoord.y), mx, mb), crt_mask(float2(coord + 1.0, maskcoord.y), mx, mb), clerp);
 	}
-	float sm_offset=0.0;bool bsm_offset=(shadow_msk==1.0||shadow_msk==3.0||shadow_msk==6.0||shadow_msk==7.0||shadow_msk==9.0||shadow_msk==12.0);
+	float sm_offset=0.0;bool bsm_offset=(shadow_msk==0.0||shadow_msk==2.0||shadow_msk==5.0||shadow_msk==6.0||shadow_msk==8.0||shadow_msk==11.0);
 	if( zoomed)
 	{
 	if(mask_layout<0.5&&bsm_offset)sm_offset=1.0;else
@@ -3131,7 +3131,7 @@ float4 ChromaticPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	cmask=min(cmask,1.0);
 	dmask=min(dmask,1.0);
 	}
-	float dark_compensate=lerp(max(clamp(lerp(mcut,maskstr,mx),0.0,1.0)-1.0+ mask_compensate,0.0)+1.0,1.0,mx); if(shadow_msk< 0.5) dark_compensate=1.0;
+	float dark_compensate=lerp(max(clamp(lerp(mcut,maskstr,mx),0.0,1.0)-1.0+ mask_compensate,0.0)+1.0,1.0,mx); if(shadow_msk< -0.5) dark_compensate=1.0;
 	float bb=lerp(brightboost1,brightboost2,mx)* dark_compensate; color*=bb;
 	float3 Ref=texCD(NTSC_S08,pos).rgb;
 	float maxb=texCD(NTSC_S13,pos).a;

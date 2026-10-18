@@ -483,7 +483,7 @@ uniform float ntsc_fonts <
 	ui_category = "NTSC Settings";
 	ui_type = "drag";
 	ui_min = 0.25;
-	ui_max = 1.0;
+	ui_max = 0.75;
 	ui_step = 0.01;
 	ui_label = "NTSC Preserve Fonts (0.25 = OFF)";
 > = 0.25;
@@ -599,9 +599,9 @@ uniform float HSHARPNESS <
 uniform float LIGMA_H <
 	ui_category = "Filtering Options";
 	ui_type = "drag";
-	ui_min = 0.1;
-	ui_max = 7.0;
-	ui_step = 0.025;
+	ui_min = 0.15;
+	ui_max = 1.0;
+	ui_step = 0.01;
 	ui_label = "Horizontal Blur Sigma";
 > = 0.5;
 

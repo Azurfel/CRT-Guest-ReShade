@@ -600,9 +600,9 @@ uniform float HSHARPNESS <
 uniform float LIGMA_H <
 	ui_category = "Filtering Options";
 	ui_type = "drag";
-	ui_min = 0.1;
-	ui_max = 7.0;
-	ui_step = 0.025;
+	ui_min = 0.15;
+	ui_max = 1.0;
+	ui_step = 0.01;
 	ui_label = "Horizontal Blur Sigma";
 > = 0.5;
 
@@ -763,8 +763,8 @@ uniform float SIGMA_X <
 	ui_category = "Bloom/Halation (Glow) Pass Settings";
 	ui_type = "drag";
 	ui_min = 0.25;
-	ui_max = 15.0;
-	ui_step = 0.025;
+	ui_max = 3.0;
+	ui_step = 0.01;
 	ui_label = "Horizontal Bloom/Halation Sigma";
 > = 0.75;
 

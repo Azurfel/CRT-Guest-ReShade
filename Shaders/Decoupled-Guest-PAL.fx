@@ -45,8 +45,8 @@ uniform float PR <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'R'";
-> = 0.32;
+	ui_label = "Persistence Red";
+> = 0.0;
 
 uniform float PG <
 	ui_category = "Afterglow Settings";
@@ -54,8 +54,8 @@ uniform float PG <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'G'";
-> = 0.32;
+	ui_label = "Persistence Green";
+> = 0.0;
 
 uniform float PB <
 	ui_category = "Afterglow Settings";
@@ -63,8 +63,8 @@ uniform float PB <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'B'";
-> = 0.32;
+	ui_label = "Persistence Blue";
+> = 0.0;
 
 uniform float AS <
 	ui_category = "Afterglow Settings";
@@ -73,7 +73,7 @@ uniform float AS <
 	ui_max = 0.6;
 	ui_step = 0.01;
 	ui_label = "Afterglow Strength";
-> = 0.2;
+> = 0.0;
 
 uniform float ST <
 	ui_category = "Afterglow Settings";
@@ -81,7 +81,7 @@ uniform float ST <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.01;
-	ui_label = "Afterglow Saturation";
+	ui_label = "Afterglow saturation";
 > = 0.5;
 
 uniform float CS <
@@ -100,7 +100,7 @@ uniform float CP <
 	ui_max = 5.0;
 	ui_step = 1.0;
 	ui_label = "CRT Profile: EBU | P22 | SMPTE-C | Philips | Trinitron";
-> = 0.0;
+> = -1.0;
 
 uniform float TNTC <
 	ui_category = "Color Tweaks";
@@ -244,7 +244,7 @@ uniform float interr <
 	ui_max = 800.0;
 	ui_step = 25.0;
 	ui_label = "Interlace Trigger Resolution";
-> = 400.0;
+> = 375.0;
 
 uniform float interm <
 	ui_category = "Interlacing Options";
@@ -253,7 +253,7 @@ uniform float interm <
 	ui_max = 6.0;
 	ui_step = 1.0;
 	ui_label = "Interlace Mode: 0:OFF | 1-3,6:Normal | 4-5:Interpolation";
-> = 4.0;
+> = 0.0;
 
 uniform float iscanb <
 	ui_category = "Interlacing Options";
@@ -261,8 +261,8 @@ uniform float iscanb <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Effect (Interlaced Brightness)";
-> = 0.2;
+	ui_label = "Interlacing Scanline Effect ('Laced Brightness)";
+> = 0.0;
 
 uniform float intres <
 	ui_category = "Resolution/Scaling Options";
@@ -270,7 +270,7 @@ uniform float intres <
 	ui_min = 0.0;
 	ui_max = 10.0;
 	ui_step = 0.5;
-	ui_label = "Internal Resolution Y: 0.5 | Y-Dowsample";
+	ui_label = "Internal Resolution Y: 0.5...y-dowsample divider";
 > = 0.0;
 
 uniform float downsample_levelx <
@@ -279,7 +279,7 @@ uniform float downsample_levelx <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Downsampling-X (High-Res Content, Pre-Scalers)";
+	ui_label = "Downsampling-X (High-res content, pre-scalers)";
 > = 0.0;
 
 uniform float downsample_levely <
@@ -288,7 +288,7 @@ uniform float downsample_levely <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Downsampling-Y (High-Res Content, Pre-Scalers)";
+	ui_label = "Downsampling-Y (High-res content, pre-scalers)";
 > = 0.0;
 
 uniform float iscans <
@@ -297,8 +297,8 @@ uniform float iscans <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Saturation";
-> = 0.25;
+	ui_label = "Interlacing (Scanline) Saturation";
+> = 0.0;
 
 uniform float hiscan <
 	ui_category = "Resolution/Scaling Options";
@@ -306,7 +306,7 @@ uniform float hiscan <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 1.0;
-	ui_label = "High Resolution Scanlines (Prepend A Scaler)";
+	ui_label = "High Resolution Scanlines (prepend a scaler...)";
 > = 0.0;
 
 uniform float PAL_FILT <
@@ -316,7 +316,7 @@ uniform float PAL_FILT <
 	ui_max = 4.0;
 	ui_step = 1.0;
 	ui_label = "PAL Connection: RF | Composite | S-Video | SCART";
-> = 1.00;
+> = 4.00;
 
 uniform float filter_res <
 	ui_category = "Resolution/Scaling Options";
@@ -333,7 +333,7 @@ uniform float PHMOD <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 1.0;
-	ui_label = "PAL Phase: Auto | Progressive | Laced";
+	ui_label = "PAL Phase: Auto | Progressive | Laced (Dot Crawl)";
 > = 0.00;
 
 uniform float ARTIFACTING <
@@ -343,7 +343,7 @@ uniform float ARTIFACTING <
 	ui_max = 5.0;
 	ui_step = 0.1;
 	ui_label = "PAL Artifacting Value";
-> = 0.70;
+> = 0.0;
 
 uniform float FRINGING <
 	ui_category = "PAL Controls";
@@ -352,7 +352,7 @@ uniform float FRINGING <
 	ui_max = 5.0;
 	ui_step = 0.1;
 	ui_label = "PAL Fringing Value";
-> = 0.70;
+> = 0.0;
 
 uniform float SATURATION <
 	ui_category = "PAL Controls";
@@ -361,7 +361,7 @@ uniform float SATURATION <
 	ui_max = 2.0;
 	ui_step = 0.01;
 	ui_label = "PAL Saturation Boost";
-> = 1.05;
+> = 1.0;
 
 uniform float BRIGHTNESS <
 	ui_category = "PAL Controls";
@@ -379,7 +379,7 @@ uniform float CHROMAF <
 	ui_max = 2.0;
 	ui_step = 1.00;
 	ui_label = "PAL UV Chroma Filter";
-> = 2.00;
+> = 1.00;
 
 uniform float DLINE <
 	ui_category = "PAL Controls";
@@ -469,7 +469,7 @@ uniform float pal_ring <
 	ui_max = 1.0;
 	ui_step = 0.5;
 	ui_label = "PAL Anti Ringing";
-> = 0.5;
+> = 0.0;
 
 uniform float CSHARPEN <
 	ui_category = "FSharpen";
@@ -486,8 +486,8 @@ uniform float CCONTR <
 	ui_min = 0.0;
 	ui_max = 0.25;
 	ui_step = 0.01;
-	ui_label = "FSharpen - Sharpen (+ Deblur) Contrast";
-> = 0.05;
+	ui_label = "FSharpen - Sharpen (+ Deb) Contrast";
+> = 0.0;
 
 uniform float CDETAILS <
 	ui_category = "FSharpen";
@@ -495,8 +495,8 @@ uniform float CDETAILS <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "FSharpen - Sharpen Details";
-> = 1.0;
+	ui_label = "FSharpen - Details sharpened";
+> = 0.0;
 
 uniform float NDEBLUR <
 	ui_category = "FSharpen";
@@ -550,7 +550,7 @@ uniform float LIGMA_H <
 	ui_max = 7.0;
 	ui_step = 0.025;
 	ui_label = "Horizontal Blur Sigma";
-> = 0.8;
+> = 0.5;
 
 uniform float S_SHARP <
 	ui_category = "Filtering Options";
@@ -559,7 +559,7 @@ uniform float S_SHARP <
 	ui_max = 3.0;
 	ui_step = 0.05;
 	ui_label = "Substractive Sharpness";
-> = 1.1;
+> = 0.0;
 
 uniform float MAXS <
 	ui_category = "Filtering Options";
@@ -568,7 +568,7 @@ uniform float MAXS <
 	ui_max = 0.3;
 	ui_step = 0.01;
 	ui_label = "Maximum Sharpness";
-> = 0.18;
+> = 0.0;
 
 uniform float SSRNG <
 	ui_category = "Filtering Options";
@@ -585,8 +585,8 @@ uniform float spike <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.1;
-	ui_label = "Scanlines Spike Removal";
-> = 1.0;
+	ui_label = "Scanline Spike Removal";
+> = 0.0;
 
 #include "ReShade.fxh"
 

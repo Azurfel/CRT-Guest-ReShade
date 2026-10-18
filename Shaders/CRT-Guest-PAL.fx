@@ -44,7 +44,7 @@ uniform float PR <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'R'";
+	ui_label = "Persistence Red";
 > = 0.32;
 
 uniform float PG <
@@ -53,7 +53,7 @@ uniform float PG <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'G'";
+	ui_label = "Persistence Green";
 > = 0.32;
 
 uniform float PB <
@@ -62,7 +62,7 @@ uniform float PB <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'B'";
+	ui_label = "Persistence Blue";
 > = 0.32;
 
 uniform float AS <
@@ -80,7 +80,7 @@ uniform float ST <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.01;
-	ui_label = "Afterglow Saturation";
+	ui_label = "Afterglow saturation";
 > = 0.5;
 
 uniform float CS <
@@ -243,7 +243,7 @@ uniform float interr <
 	ui_max = 800.0;
 	ui_step = 25.0;
 	ui_label = "Interlace Trigger Resolution";
-> = 400.0;
+> = 375.0;
 
 uniform float interm <
 	ui_category = "Interlacing Options";
@@ -252,7 +252,7 @@ uniform float interm <
 	ui_max = 6.0;
 	ui_step = 1.0;
 	ui_label = "Interlace Mode: 0:OFF | 1-3,6:Normal | 4-5:Interpolation";
-> = 4.0;
+> = 2.0;
 
 uniform float iscanb <
 	ui_category = "Interlacing Options";
@@ -260,7 +260,7 @@ uniform float iscanb <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Effect (Interlaced Brightness)";
+	ui_label = "Interlacing Scanline Effect ('Laced Brightness)";
 > = 0.2;
 
 uniform float intres <
@@ -269,7 +269,7 @@ uniform float intres <
 	ui_min = 0.0;
 	ui_max = 10.0;
 	ui_step = 0.5;
-	ui_label = "Internal Resolution Y: 0.5 | Y-Dowsample";
+	ui_label = "Internal Resolution Y: 0.5...y-dowsample divider";
 > = 0.0;
 
 uniform float downsample_levelx <
@@ -278,7 +278,7 @@ uniform float downsample_levelx <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Downsampling-X (High-Res Content, Pre-Scalers)";
+	ui_label = "Downsampling-X (High-res content, pre-scalers)";
 > = 0.0;
 
 uniform float downsample_levely <
@@ -287,7 +287,7 @@ uniform float downsample_levely <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Downsampling-Y (High-Res Content, Pre-Scalers)";
+	ui_label = "Downsampling-Y (High-res content, pre-scalers)";
 > = 0.0;
 
 uniform float iscans <
@@ -296,7 +296,7 @@ uniform float iscans <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Saturation";
+	ui_label = "Interlacing (Scanline) Saturation";
 > = 0.25;
 
 uniform float hiscan <
@@ -305,7 +305,7 @@ uniform float hiscan <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 1.0;
-	ui_label = "High Resolution Scanlines (Prepend A Scaler)";
+	ui_label = "High Resolution Scanlines (prepend a scaler...)";
 > = 0.0;
 
 uniform float PAL_FILT <
@@ -315,7 +315,7 @@ uniform float PAL_FILT <
 	ui_max = 4.0;
 	ui_step = 1.0;
 	ui_label = "PAL Connection: RF | Composite | S-Video | SCART";
-> = 1.00;
+> = 2.00;
 
 uniform float filter_res <
 	ui_category = "Resolution/Scaling Options";
@@ -332,7 +332,7 @@ uniform float PHMOD <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 1.0;
-	ui_label = "PAL Phase: Auto | Progressive | Laced";
+	ui_label = "PAL Phase: Auto | Progressive | Laced (Dot Crawl)";
 > = 0.00;
 
 uniform float ARTIFACTING <
@@ -342,7 +342,7 @@ uniform float ARTIFACTING <
 	ui_max = 5.0;
 	ui_step = 0.1;
 	ui_label = "PAL Artifacting Value";
-> = 0.70;
+> = 0.40;
 
 uniform float FRINGING <
 	ui_category = "PAL Controls";
@@ -351,7 +351,7 @@ uniform float FRINGING <
 	ui_max = 5.0;
 	ui_step = 0.1;
 	ui_label = "PAL Fringing Value";
-> = 0.70;
+> = 0.40;
 
 uniform float SATURATION <
 	ui_category = "PAL Controls";
@@ -378,7 +378,7 @@ uniform float CHROMAF <
 	ui_max = 2.0;
 	ui_step = 1.00;
 	ui_label = "PAL UV Chroma Filter";
-> = 2.00;
+> = 1.00;
 
 uniform float DLINE <
 	ui_category = "PAL Controls";
@@ -468,7 +468,7 @@ uniform float pal_ring <
 	ui_max = 1.0;
 	ui_step = 0.5;
 	ui_label = "PAL Anti Ringing";
-> = 0.5;
+> = 0.7;
 
 uniform float CSHARPEN <
 	ui_category = "FSharpen";
@@ -485,7 +485,7 @@ uniform float CCONTR <
 	ui_min = 0.0;
 	ui_max = 0.25;
 	ui_step = 0.01;
-	ui_label = "FSharpen - Sharpen (+ Deblur) Contrast";
+	ui_label = "FSharpen - Sharpen (+ Deb) Contrast";
 > = 0.05;
 
 uniform float CDETAILS <
@@ -494,7 +494,7 @@ uniform float CDETAILS <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "FSharpen - Sharpen Details";
+	ui_label = "FSharpen - Details sharpened";
 > = 1.0;
 
 uniform float NDEBLUR <
@@ -558,7 +558,7 @@ uniform float OS <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 1.0;
-	ui_label = "Raster Bloom Overscan Mode";
+	ui_label = "R. Bloom Overscan Mode";
 > = 1.0;
 
 uniform float blm_2 <
@@ -567,7 +567,7 @@ uniform float blm_2 <
 	ui_min = 0.0;
 	ui_max = 20.0;
 	ui_step = 1.0;
-	ui_label = "Raster Bloom %";
+	ui_label = "Raster bloom %";
 > = 0.0;
 
 uniform float gamma_i <
@@ -585,7 +585,7 @@ uniform float gamma_o <
 	ui_min = 1.0;
 	ui_max = 5.0;
 	ui_step = 0.05;
-	ui_label = "Gamma Out";
+	ui_label = "Gamma out";
 > = 1.95;
 
 uniform float HSHARPNESS <
@@ -604,7 +604,7 @@ uniform float LIGMA_H <
 	ui_max = 7.0;
 	ui_step = 0.025;
 	ui_label = "Horizontal Blur Sigma";
-> = 0.8;
+> = 0.5;
 
 uniform float S_SHARP <
 	ui_category = "Filtering Options";
@@ -622,7 +622,7 @@ uniform float MAXS <
 	ui_max = 0.3;
 	ui_step = 0.01;
 	ui_label = "Maximum Sharpness";
-> = 0.18;
+> = 0.21;
 
 uniform float SSRNG <
 	ui_category = "Filtering Options";
@@ -639,7 +639,7 @@ uniform float spike <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.1;
-	ui_label = "Scanlines Spike Removal";
+	ui_label = "Scanline Spike Removal";
 > = 1.0;
 
 uniform float m_glow <
@@ -702,7 +702,7 @@ uniform float FINE_GAUSS <
 	ui_min = -1.0;
 	ui_max = 5.0;
 	ui_step = 1.0;
-	ui_label = "Fine (Magic) Glow Sampling";
+	ui_label = "Fine Glow/M.Glow Sampling";
 > = 1.0;
 
 uniform float SIZEH <
@@ -855,7 +855,7 @@ uniform float gamma_c <
 	ui_min = 0.5;
 	ui_max = 2.0;
 	ui_step = 0.025;
-	ui_label = "Gamma Correct";
+	ui_label = "Gamma correct";
 > = 1.0;
 
 uniform float gamma_d <
@@ -901,7 +901,7 @@ uniform float bloomsamp <
 	ui_max = 2.0;
 	ui_step = 1.0;
 	ui_label = "Bloom Pixel Sampling";
-> = 2.0;
+> = 0.0;
 
 uniform float gsl <
 	ui_category = "Scanline Options";
@@ -909,7 +909,7 @@ uniform float gsl <
 	ui_min = -1.0;
 	ui_max = 2.0;
 	ui_step = 1.0;
-	ui_label = "Scanlines Type";
+	ui_label = "Scanline Type";
 > = 0.0;
 
 uniform float scanline1 <
@@ -918,7 +918,7 @@ uniform float scanline1 <
 	ui_min = -20.0;
 	ui_max = 40.0;
 	ui_step = 0.5;
-	ui_label = "Scanlines Beam Shape Center";
+	ui_label = "Scanline Beam Shape Center";
 > = 6.0;
 
 uniform float scanline2 <
@@ -927,7 +927,7 @@ uniform float scanline2 <
 	ui_min = 0.0;
 	ui_max = 70.0;
 	ui_step = 1.0;
-	ui_label = "Scanlines Beam Shape Edges";
+	ui_label = "Scanline Beam Shape Edges";
 > = 8.0;
 
 uniform float beam_min <
@@ -936,7 +936,7 @@ uniform float beam_min <
 	ui_min = 0.25;
 	ui_max = 10.0;
 	ui_step = 0.05;
-	ui_label = "Scanlines Shape Dark Pixels";
+	ui_label = "Scanline Shape Dark Pixels";
 > = 1.3;
 
 uniform float beam_max <
@@ -945,7 +945,7 @@ uniform float beam_max <
 	ui_min = 0.2;
 	ui_max = 3.5;
 	ui_step = 0.025;
-	ui_label = "Scanlines Shape Bright Pixels";
+	ui_label = "Scanline Shape Bright Pixels";
 > = 1.0;
 
 uniform float tds <
@@ -963,7 +963,7 @@ uniform float beam_size <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Increased Bright Scanlines Beam";
+	ui_label = "Increased Bright Scanline Beam";
 > = 0.6;
 
 uniform float scans <
@@ -972,7 +972,7 @@ uniform float scans <
 	ui_min = 0.0;
 	ui_max = 6.0;
 	ui_step = 0.1;
-	ui_label = "Scanlines Saturation / Mask Falloff";
+	ui_label = "Scanline Saturation / Mask Falloff";
 > = 0.5;
 
 uniform float scan_falloff <
@@ -981,7 +981,7 @@ uniform float scan_falloff <
 	ui_min = 0.1;
 	ui_max = 2.0;
 	ui_step = 0.025;
-	ui_label = "Scanlines Falloff";
+	ui_label = "Scanline Falloff";
 > = 1.0;
 
 uniform float ssharp <
@@ -991,7 +991,7 @@ uniform float ssharp <
 	ui_max = 0.5;
 	ui_step = 0.01;
 	ui_label = "Smart Sharpen Scanlines";
-> = 0.01;
+> = 0.0;
 
 uniform float scangamma <
 	ui_category = "Scanline Options";
@@ -999,7 +999,7 @@ uniform float scangamma <
 	ui_min = 0.5;
 	ui_max = 5.0;
 	ui_step = 0.05;
-	ui_label = "Scanlines Gamma";
+	ui_label = "Scanline Gamma";
 > = 2.4;
 
 uniform float rolling_scan <
@@ -1017,7 +1017,7 @@ uniform float no_scanlines <
 	ui_min = 0.0;
 	ui_max = 1.5;
 	ui_step = 0.05;
-	ui_label = "No-Scanlines Mode";
+	ui_label = "No-scanline Mode";
 > = 0.0;
 
 uniform float IOS <
@@ -1026,7 +1026,7 @@ uniform float IOS <
 	ui_min = 0.0;
 	ui_max = 4.0;
 	ui_step = 1.0;
-	ui_label = "Integer Scaling: Odd:Y | Even:X+Y";
+	ui_label = "Integer Scaling: Odd:Y | Even:'X'+Y";
 > = 0.0;
 
 uniform float warpx <
@@ -1071,7 +1071,7 @@ uniform float overscanx <
 	ui_min = -200.0;
 	ui_max = 200.0;
 	ui_step = 1.0;
-	ui_label = "Overscan X Original Pixels";
+	ui_label = "Overscan X original Pixels";
 > = 0.0;
 
 uniform float overscany <
@@ -1080,7 +1080,7 @@ uniform float overscany <
 	ui_min = -200.0;
 	ui_max = 200.0;
 	ui_step = 1.0;
-	ui_label = "Overscan Y Original Pixels";
+	ui_label = "Overscan Y original Pixels";
 > = 0.0;
 
 uniform float VShift <
@@ -1152,7 +1152,7 @@ uniform float shadow_msk <
 	ui_min = 0.0;
 	ui_max = 15.0;
 	ui_step = 1.0;
-	ui_label = "CRT Mask: 1:CGWG | 2-5:Lottes | 6-15:Trinitron";
+	ui_label = "CRT Mask: 1:CGWG | 2-5:Lottes | 6-15:'Trinitron'";
 > = 1.0;
 
 uniform float maskstr <
@@ -1197,7 +1197,7 @@ uniform float mask_zoom <
 	ui_min = -10.0;
 	ui_max = 6.0;
 	ui_step = 1.0;
-	ui_label = "CRT Mask Zoom (+ Mask Width)";
+	ui_label = "CRT Mask Zoom (+ mask width)";
 > = 0.0;
 
 uniform float zoom_mask <
@@ -1206,7 +1206,7 @@ uniform float zoom_mask <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "CRT Mask Zoom Sharpen";
+	ui_label = "CRT Mask Zoom Sharpen (needs Mask Zoom)";
 > = 0.0;
 
 uniform float mshift <
@@ -1224,7 +1224,7 @@ uniform float mask_layout <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 1.0;
-	ui_label = "Mask Layout: RGB or BGR (Check LCD Panel)";
+	ui_label = "Mask Layout Sequence: RGB or BGR (check LCD panel)";
 > = 0.0;
 
 uniform float laysh <
@@ -1242,7 +1242,7 @@ uniform float mask_drk <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Lottes Mask Dark";
+	ui_label = "Lottes maskDark";
 > = 0.5;
 
 uniform float mask_lgt <
@@ -1251,7 +1251,7 @@ uniform float mask_lgt <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Lottes Mask Bright";
+	ui_label = "Lottes maskBright";
 > = 1.5;
 
 uniform float mask_gamma <
@@ -1260,7 +1260,7 @@ uniform float mask_gamma <
 	ui_min = 1.0;
 	ui_max = 5.0;
 	ui_step = 0.05;
-	ui_label = "Mask Gamma";
+	ui_label = "Mask gamma";
 > = 2.4;
 
 uniform float slotmask1 <
@@ -1296,7 +1296,7 @@ uniform float double_slot <
 	ui_min = 1.0;
 	ui_max = 4.0;
 	ui_step = 1.0;
-	ui_label = "Slot Mask Height: 2x1 or 4x1";
+	ui_label = "Slot Mask Height: 2x1 or 4x1...";
 > = 2.0;
 
 uniform float slotms <
@@ -1314,7 +1314,7 @@ uniform float smoothmask <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.25;
-	ui_label = "Smooth Masks In Bright Scanlines";
+	ui_label = "Smooth Masks in bright scanlines";
 > = 0.0;
 
 uniform float smask_mit <
@@ -1332,7 +1332,7 @@ uniform float bmask <
 	ui_min = 0.0;
 	ui_max = 0.25;
 	ui_step = 0.01;
-	ui_label = "Base (Black) Mask Strength";
+	ui_label = "Base (black) Mask Strength";
 > = 0.0;
 
 uniform float mclip <
@@ -1350,7 +1350,7 @@ uniform float pr_scan <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.025;
-	ui_label = "Preserve Scanlines Properties";
+	ui_label = "Preserve Scanline Properties";
 > = 0.1;
 
 uniform float edgemask <
@@ -1368,7 +1368,7 @@ uniform float dctypex <
 	ui_min = 0.0;
 	ui_max = 0.75;
 	ui_step = 0.05;
-	ui_label = "Deconvergence Type X: 0:Static | Other:Dynamic";
+	ui_label = "Deconvergence Type X: 0:static | Other:dynamic";
 > = 0.0;
 
 uniform float dctypey <
@@ -1386,7 +1386,7 @@ uniform float deconrx <
 	ui_min = -15.0;
 	ui_max = 15.0;
 	ui_step = 0.25;
-	ui_label = "Horizontal Deconvergence 'R' Range";
+	ui_label = "Horizontal Deconvergence Red Range";
 > = 0.0;
 
 uniform float decongx <
@@ -1395,7 +1395,7 @@ uniform float decongx <
 	ui_min = -15.0;
 	ui_max = 15.0;
 	ui_step = 0.25;
-	ui_label = "Horizontal Deconvergence 'G' Range";
+	ui_label = "Horizontal Deconvergence Green Range";
 > = 0.0;
 
 uniform float deconbx <
@@ -1404,7 +1404,7 @@ uniform float deconbx <
 	ui_min = -15.0;
 	ui_max = 15.0;
 	ui_step = 0.25;
-	ui_label = "Horizontal Deconvergence 'B' Range";
+	ui_label = "Horizontal Deconvergence Blue Range";
 > = 0.0;
 
 uniform float deconry <
@@ -1413,7 +1413,7 @@ uniform float deconry <
 	ui_min = -15.0;
 	ui_max = 15.0;
 	ui_step = 0.25;
-	ui_label = "Vertical Deconvergence 'R' Range";
+	ui_label = "Vertical Deconvergence Red Range";
 > = 0.0;
 
 uniform float decongy <
@@ -1422,7 +1422,7 @@ uniform float decongy <
 	ui_min = -15.0;
 	ui_max = 15.0;
 	ui_step = 0.25;
-	ui_label = "Vertical Deconvergence 'G' Range";
+	ui_label = "Vertical Deconvergence Green Range";
 > = 0.0;
 
 uniform float deconby <
@@ -1431,7 +1431,7 @@ uniform float deconby <
 	ui_min = -15.0;
 	ui_max = 15.0;
 	ui_step = 0.25;
-	ui_label = "Vertical Deconvergence 'B' Range";
+	ui_label = "Vertical Deconvergence Blue Range";
 > = 0.0;
 
 uniform float decons <

@@ -44,8 +44,8 @@ uniform float PR <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'R'";
-> = 0.32;
+	ui_label = "Persistence Red";
+> = 0.0;
 
 uniform float PG <
 	ui_category = "Afterglow Settings";
@@ -53,8 +53,8 @@ uniform float PG <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'G'";
-> = 0.32;
+	ui_label = "Persistence Green";
+> = 0.0;
 
 uniform float PB <
 	ui_category = "Afterglow Settings";
@@ -62,8 +62,8 @@ uniform float PB <
 	ui_min = 0.0;
 	ui_max = 0.5;
 	ui_step = 0.01;
-	ui_label = "Persistence 'B'";
-> = 0.32;
+	ui_label = "Persistence Blue";
+> = 0.0;
 
 uniform float AS <
 	ui_category = "Afterglow Settings";
@@ -72,7 +72,7 @@ uniform float AS <
 	ui_max = 0.6;
 	ui_step = 0.01;
 	ui_label = "Afterglow Strength";
-> = 0.2;
+> = 0.0;
 
 uniform float ST <
 	ui_category = "Afterglow Settings";
@@ -80,7 +80,7 @@ uniform float ST <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.01;
-	ui_label = "Afterglow Saturation";
+	ui_label = "Afterglow saturation";
 > = 0.5;
 
 uniform float CS <
@@ -99,7 +99,7 @@ uniform float CP <
 	ui_max = 5.0;
 	ui_step = 1.0;
 	ui_label = "CRT Profile: EBU | P22 | SMPTE-C | Philips | Trinitron";
-> = 0.0;
+> = -1.0;
 
 uniform float TNTC <
 	ui_category = "Color Tweaks";
@@ -243,7 +243,7 @@ uniform float interr <
 	ui_max = 800.0;
 	ui_step = 25.0;
 	ui_label = "Interlace Trigger Resolution";
-> = 400.0;
+> = 375.0;
 
 uniform float interm <
 	ui_category = "Interlacing Options";
@@ -252,7 +252,7 @@ uniform float interm <
 	ui_max = 6.0;
 	ui_step = 1.0;
 	ui_label = "Interlace Mode: 0:OFF | 1-3,6:Normal | 4-5:Interpolation";
-> = 4.0;
+> = 0.0;
 
 uniform float iscanb <
 	ui_category = "Interlacing Options";
@@ -260,8 +260,8 @@ uniform float iscanb <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Effect (Interlaced Brightness)";
-> = 0.2;
+	ui_label = "Interlacing Scanline Effect ('Laced Brightness)";
+> = 0.0;
 
 uniform float intres <
 	ui_category = "Resolution/Scaling Options";
@@ -269,7 +269,7 @@ uniform float intres <
 	ui_min = 0.0;
 	ui_max = 10.0;
 	ui_step = 0.5;
-	ui_label = "Internal Resolution Y: 0.5 | Y-Dowsample";
+	ui_label = "Internal Resolution Y: 0.5...y-dowsample divider";
 > = 0.0;
 
 uniform float downsample_levelx <
@@ -278,7 +278,7 @@ uniform float downsample_levelx <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Downsampling-X (High-Res Content, Pre-Scalers)";
+	ui_label = "Downsampling-X (High-res content, pre-scalers)";
 > = 0.0;
 
 uniform float downsample_levely <
@@ -287,7 +287,7 @@ uniform float downsample_levely <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.05;
-	ui_label = "Downsampling-Y (High-Res Content, Pre-Scalers)";
+	ui_label = "Downsampling-Y (High-res content, pre-scalers)";
 > = 0.0;
 
 uniform float iscans <
@@ -296,8 +296,8 @@ uniform float iscans <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "Interlacing Scanlines Saturation";
-> = 0.25;
+	ui_label = "Interlacing (Scanline) Saturation";
+> = 0.0;
 
 uniform float hiscan <
 	ui_category = "Resolution/Scaling Options";
@@ -305,7 +305,7 @@ uniform float hiscan <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 1.0;
-	ui_label = "High Resolution Scanlines (Prepend A Scaler)";
+	ui_label = "High Resolution Scanlines (prepend a scaler...)";
 > = 0.0;
 
 uniform float filter_res <
@@ -332,8 +332,8 @@ uniform float cust_artifacting <
 	ui_min = 0.0;
 	ui_max = 5.0;
 	ui_step = 0.1;
-	ui_label = "NTSC Custom Artifacting Value";
-> = 1.0;
+	ui_label = "NTSC Artifacting Value";
+> = 0.0;
 
 uniform float cust_fringing <
 	ui_category = "NTSC Settings";
@@ -341,8 +341,8 @@ uniform float cust_fringing <
 	ui_min = 0.0;
 	ui_max = 5.0;
 	ui_step = 0.1;
-	ui_label = "NTSC Custom Fringing Value";
-> = 1.0;
+	ui_label = "NTSC Fringing Value";
+> = 0.0;
 
 uniform float ntsc_fields <
 	ui_category = "NTSC Settings";
@@ -413,7 +413,7 @@ uniform float ntsc_rainbow <
 	ui_min = 0.0;
 	ui_max = 3.0;
 	ui_step = 1.0;
-	ui_label = "NTSC Coloring/Rainbow Effect (2 Phase)";
+	ui_label = "NTSC Coloring/Rainbow Effect (2-phase)";
 > = 0.0;
 
 uniform float ntsc_taps <
@@ -431,7 +431,7 @@ uniform float ntsc_charp1 <
 	ui_min = 0.0;
 	ui_max = 10.0;
 	ui_step = 0.5;
-	ui_label = "NTSC Preserve 'Edge' Colors (2 Phase)";
+	ui_label = "NTSC Preserve 'Edge' Colors (2-phase)";
 > = 0.0;
 
 uniform float ntsc_charp2 <
@@ -440,7 +440,7 @@ uniform float ntsc_charp2 <
 	ui_min = 0.0;
 	ui_max = 10.0;
 	ui_step = 0.5;
-	ui_label = "NTSC Preserve 'Edge' Colors (3 Phase)";
+	ui_label = "NTSC Preserve 'Edge' Colors (3-phase)";
 > = 0.0;
 
 uniform float ntsc_cscale1 <
@@ -449,8 +449,8 @@ uniform float ntsc_cscale1 <
 	ui_min = 0.5;
 	ui_max = 4.00;
 	ui_step = 0.05;
-	ui_label = "NTSC Chroma Scaling/Bleeding (2 Phase)";
-> = 1.0;
+	ui_label = "NTSC Chroma Scaling/Bleeding (2-phase)";
+> = 3.2;
 
 uniform float ntsc_cscale2 <
 	ui_category = "NTSC Settings";
@@ -458,7 +458,7 @@ uniform float ntsc_cscale2 <
 	ui_min = 0.2;
 	ui_max = 2.25;
 	ui_step = 0.05;
-	ui_label = "NTSC Chroma Scaling/Bleeding (3 Phase)";
+	ui_label = "NTSC Chroma Scaling/Bleeding (3-phase)";
 > = 1.0;
 
 uniform float ntsc_ring <
@@ -468,7 +468,7 @@ uniform float ntsc_ring <
 	ui_max = 1.0;
 	ui_step = 0.1;
 	ui_label = "NTSC Anti-Ringing";
-> = 0.5;
+> = 0.0;
 
 uniform float ntsc_shrp <
 	ui_category = "NTSC Settings";
@@ -485,7 +485,7 @@ uniform float ntsc_fonts <
 	ui_min = 0.25;
 	ui_max = 1.0;
 	ui_step = 0.01;
-	ui_label = "NTSC Sharpness - Preserve Fonts (0.35 is a Good Spot)";
+	ui_label = "NTSC Preserve Fonts (0.25 = OFF)";
 > = 0.25;
 
 uniform float ntsc_shpe <
@@ -504,7 +504,7 @@ uniform float RFNOISE <
 	ui_max = 1.0;
 	ui_step = 0.01;
 	ui_label = "NTSC RF Noise Frequency";
-> = 0.30;
+> = 0.0;
 
 uniform float RFNOISE1 <
 	ui_category = "RF Noise Options";
@@ -539,8 +539,8 @@ uniform float CCONTR <
 	ui_min = 0.0;
 	ui_max = 0.25;
 	ui_step = 0.01;
-	ui_label = "FSharpen - Sharpen (+ Deblur) Contrast";
-> = 0.05;
+	ui_label = "FSharpen - Sharpen (+ Deb) Contrast";
+> = 0.0;
 
 uniform float CDETAILS <
 	ui_category = "FSharpen";
@@ -548,8 +548,8 @@ uniform float CDETAILS <
 	ui_min = 0.0;
 	ui_max = 1.0;
 	ui_step = 0.05;
-	ui_label = "FSharpen - Sharpen Details";
-> = 1.0;
+	ui_label = "FSharpen - Details sharpened";
+> = 0.0;
 
 uniform float NDEBLUR <
 	ui_category = "FSharpen";
@@ -603,7 +603,7 @@ uniform float LIGMA_H <
 	ui_max = 7.0;
 	ui_step = 0.025;
 	ui_label = "Horizontal Blur Sigma";
-> = 0.8;
+> = 0.5;
 
 uniform float S_SHARP <
 	ui_category = "Filtering Options";
@@ -612,7 +612,7 @@ uniform float S_SHARP <
 	ui_max = 3.0;
 	ui_step = 0.05;
 	ui_label = "Substractive Sharpness";
-> = 1.1;
+> = 0.0;
 
 uniform float MAXS <
 	ui_category = "Filtering Options";
@@ -621,7 +621,7 @@ uniform float MAXS <
 	ui_max = 0.3;
 	ui_step = 0.01;
 	ui_label = "Maximum Sharpness";
-> = 0.18;
+> = 0.0;
 
 uniform float SSRNG <
 	ui_category = "Filtering Options";
@@ -630,7 +630,7 @@ uniform float SSRNG <
 	ui_max = 4.0;
 	ui_step = 0.05;
 	ui_label = "Substractive Sharpness Ringing";
-> = 0.3;
+> = 0.0;
 
 uniform float spike <
 	ui_category = "Filtering Options";
@@ -638,8 +638,8 @@ uniform float spike <
 	ui_min = 0.0;
 	ui_max = 2.0;
 	ui_step = 0.1;
-	ui_label = "Scanlines Spike Removal";
-> = 1.0;
+	ui_label = "Scanline Spike Removal";
+> = 0.0;
 
 #include "ReShade.fxh"
 

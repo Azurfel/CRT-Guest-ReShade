@@ -2,7 +2,11 @@
 
 	Decoupled - Guest - NTSC
 
-	Copyright (C) 2018-2025 guest(r)
+	Copyright (C) 2018-2026 guest(r)
+
+	Sega MS Blue Lift and Sega MD Pallete Fix fixes inspired by Azurfel
+
+	contrast_sigmoid_inv function Copyright (C) 2020-2023 Dogway (Jose Linares)
 
 	Incorporates many good ideas and suggestions from Dr. Venom.
 
@@ -18,9 +22,11 @@
 	You should have received a copy of the GNU General Public License along with this program; if not,
 	write to the Free Software Foundation, Inc, 59 Temple Place - STE 330, Boston, MA 02111-1307, USA.
 
-	Ported to ReShade by DevilSingh with some help from guest(r), and updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
+	Ported to ReShade by DevilSingh with some help from guest(r).
+	Updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
+	Updated to crt-guest-advanced-2026-07-23-release1 by Jobima and Azurfel.
 
-	Parameters reorganized, and relevant sections decoupled for more granular utility by Azurfel.
+	Relevant sections decoupled for more granular utility by Azurfel.
 
 */
 
@@ -177,10 +183,37 @@ uniform float sega_fix <
 	ui_label = "Sega Brightness Fix";
 > = 0.0;
 
+uniform float segams <
+	ui_category = "Color Tweaks";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "Sega MS Blue Lift";
+> = 0.0;
+
+uniform float segapal <
+	ui_category = "Color Tweaks";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "Sega MD Pallete Fix";
+> = 0.0;
+
 uniform float BP <
 	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = -100.0;
+	ui_max = 0.0;
+	ui_step = 1.0;
+	ui_label = "Lower Black Level";
+> = 0.0;
+
+uniform float BP1 <
+	ui_category = "Color Tweaks";
+	ui_type = "drag";
+	ui_min = 0.0;
 	ui_max = 25.0;
 	ui_step = 1.0;
 	ui_label = "Raise Black Level";
@@ -728,6 +761,15 @@ float3 pgc(float3 c)
 	return c * mg/(mc + 1e-8);  
 }
 
+float contrast_sigmoid_inv(float imgColor, float cont, float pivot)
+{
+	cont = cont - 1.0; cont = cont*cont*cont;
+	float knee  = 1.0 / (1.0 + exp (cont *  pivot));
+	float shldr = 1.0 / (1.0 + exp (cont * (pivot - 1.0)));
+	imgColor = pivot - log(1.0 / (imgColor * (shldr - knee) + knee) - 1.0) / cont;
+	return imgColor;
+}
+
 float3 plant(float3 tar,float r)
 {
 	float t=max(max(tar.r,tar.g),tar.b)+0.00001;
@@ -851,7 +893,7 @@ float4 AfterglowPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float b = bth/255.0;
 	float c = max(max(color0.r,color0.g),color0.b);
 	w = smoothstep(b, 2.0*b, c);
-	float3 result=lerp(max(lerp(cr,a,0.49+float3(PR,PG,PB))-1.25/255.0,0.0),cr,w);
+	float3 result=lerp(max(lerp(cr,a,0.49+float3(PR,PG,PB))-0.5/255.0,0.0),cr,w);
 	return float4(result,w);
 }
 
@@ -876,9 +918,16 @@ float4 PreShaderPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float w=1.0-aftrglow.w;
 	float l=length(aftrglow.rgb);
 	aftrglow.rgb=AS*w*normalize(pow(aftrglow.rgb+0.01,ST))*l;
-	float bp=w*BP/255.0;
+	float bp=w*BP1/255.0;
 	if(sega_fix>0.5) imgColor.rgb=imgColor.rgb*(255.0/239.0);
+	if(segams>0.5) { imgColor.b=(abs(imgColor.b - 0.375) < 0.125) ? 0.4078431372549019607843137254902 : imgColor.b; }
 	imgColor.rgb=min(imgColor.rgb,1.0);
+	if (segapal > 0.5) {
+	imgColor.r = contrast_sigmoid_inv(imgColor.r,2.578419881,0.520674); 
+	imgColor.g = contrast_sigmoid_inv(imgColor.g,2.578419881,0.520674); 
+	imgColor.b = contrast_sigmoid_inv(imgColor.b,2.578419881,0.520674); }
+   
+	imgColor.rgb = min(imgColor.rgb, 1.0);
 	float3 color=imgColor.rgb;
 	if(int(TNTC)==0) {color.rgb=imgColor.rgb;}else
 	{
@@ -958,10 +1007,9 @@ float4 PreShaderPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	color=lerp(color,comp,m);
 	color=pow(max(color,0.0),1.0/p);
 	color=pgc(color);
-	if(BP>-0.5)color=color+aftrglow.rgb+bp;else
-	{
-	color=max(color+BP/255.0,0.0)/(1.0+BP/255.0*step(-BP/255.0,max(max(color.r,color.g),color.b)))+aftrglow.rgb;
-	}
+	float bp1 = min(BP, 0.0);
+	color = max(color + bp1/255.0, 0.0) / (1.0 + bp1/255.0*step(-bp1/255.0, max(max(color.r,color.g),color.b)));
+	color = color + aftrglow.rgb + bp;
 	color=min(color*pre_bb,1.0);
 	return float4(color,vignette(texcoord));
 }
@@ -1033,16 +1081,6 @@ float4 Signal_1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float3 col0=texCD(NTSCDE_S0I, vtexcoord).rgb;
 	float3 yiq1=rgb2yiq(col0);
 	yiq1.x=pow(yiq1.x,ntsc_gamma); float lum=yiq1.x;
-	if(ntsc_phase==4.0)
-	{
-	float2 dx=float2(OrgSize.z,0.0);
-	float c1=get_luma(texCD(NTSCDE_S0I,vtexcoord-dx).rgb);
-	float c2=get_luma(texCD(NTSCDE_S0I,vtexcoord+dx).rgb);
-	float miix=min(5.0*abs(c1-c2),1.0);
-	c1=pow(c1,ntsc_gamma);
-	c2=pow(c2,ntsc_gamma);
-	yiq1.x=lerp(min(0.5*(yiq1.x+max(c1,c2)),max(yiq1.x,min(c1,c2))),yiq1.x,miix);
-	}
 	float3 temp=yiq1;
 	float3 yiq2=yiq1;
 	float3 yiqs=yiq1;
@@ -1160,7 +1198,7 @@ float4 Signal_2_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float mit=1.0;
 	if(ntsc_phase>3.5){loop=max(loop,8.0); mit=1.0+0.04*pow(swoothstep(16.0,8.0,loop),0.5);}
 	float3 dx=float3(one.x,one.y,0.0);
-	float3 xd=dx; int loopstart=int(TAPS_3_phase-loop);
+	float3 xd=dx; int loopstart=int(32.0-loop);
 	dx.x*=mit;
 	for(i=loopstart;i<32;i++)
 	{
@@ -1239,7 +1277,7 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
         float d1  = texCD(NTSCDE_S03, tcoorb + yy).a;
         float d2  = texCD(NTSCDE_S03, tcoorb + xx + yy).a;
 
-        float maxdif = float(0.5 * (abs(c0-c1) + abs(c1-c2)) > (1.0 - ntsc_fonts));
+        float maxdif = float(0.5 * (abs(c0-c1) + abs(c1-c2)) > (1.0 - ntsc_fonts)) * float(abs(c2-c0) < 0.05);
         float linecb = swoothstep(0.1, 0.0, max(abs(c1-b1), abs(c1-d1)));
         linecb = linecb * float(abs(c1-b1) < 0.05 || abs(c2-d2) < 0.05);
 
@@ -1295,10 +1333,10 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float zweight=lerp(tmp1,tmp2,line2);
 	float3 signal=ref;
 	float ntzc_shrp= abs(ntsc_shrp);
-	if(ntzc_shrp>0.25)
+	if(ntzc_shrp>0.25 || ntsc_fonts > 0.255)
 	{
-	float mixer=sweight;
-	if(ntsc_shrp>0.25)mixer=zweight; mixer*=0.1*ntzc_shrp;
+	float mixer=zweight;
+	if(ntsc_shrp < -0.25)mixer=sweight; mixer*=max(0.1*ntzc_shrp, diffboost*1.25);
 	float lumix=lerp(lum2,lum1,mixer);
 	float lm1=lerp(lum2*lum2 ,lum1*lum1 ,mixer);lm1=sqrt(lm1);
 	float lm2=lerp(sqrt(lum2),sqrt(lum1),mixer);lm2=lm2* lm2 ;
@@ -1411,8 +1449,10 @@ float4 NTSC_TV1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float3 cmin=1.0.xxx;
 	float xs=max(2.0*0.4, 1.0);
 	float hsharpness=HSHARPNESS*xs*filter_res;
-	xs=1.0/(2.0*LIGMA_H*LIGMA_H*xs*xs*filter_res*filter_res);
+	float LIGMA_H2 = LIGMA_H * HSHARPNESS;
+	xs=1.0/(2.0*LIGMA_H2*LIGMA_H2*xs*xs*filter_res*filter_res);
 	float sharp=crthd_h(hsharpness,xs) *S_SHARP;
+	float ksharp = -2.0*hsharpness*xs*sharp;	
 	float maxsharp=MAXS;
 	float FPR=hsharpness;
 	float FPRi=1.0/hsharpness;
@@ -1427,8 +1467,8 @@ float4 NTSC_TV1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	{
 	pixel=texCD(NTSCDE_S08,tex+n*dx).rgb;
 	w=crthd_h(n+f,xs)-sharp;
-	fpx=(abs(n+f)-FPR)*FPRi;
-	if(w<0.0)w=max(w,lerp(-maxsharp,0.0,pow(clamp(fpx,0.0,1.0),SHARP))); else
+	fpx=clamp((abs(n+f)-FPR)*FPRi, 0.0, 1.0);
+	if(w<0.0)w=max(ksharp*fpx, maxsharp * ksharp * (1.0-fpx*fpx)); else
 	{
 	cmax=max(cmax,pixel);cmin=min(cmin,pixel);sw=w*(dot(pixel,luma)+ts);
 	sp=max(max(pixel.r,pixel.g),pixel.b);

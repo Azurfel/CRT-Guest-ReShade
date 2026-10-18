@@ -2,7 +2,11 @@
 
 	Decoupled - Guest - PAL
 
-	Copyright (C) 2018-2025 guest(r)
+	Copyright (C) 2018-2026 guest(r)
+
+	Sega MS Blue Lift and Sega MD Pallete Fix fixes inspired by Azurfel
+
+	contrast_sigmoid_inv function Copyright (C) 2020-2023 Dogway (Jose Linares)
 
 	Incorporates many good ideas and suggestions from Dr. Venom.
 
@@ -18,9 +22,11 @@
 	You should have received a copy of the GNU General Public License along with this program; if not,
 	write to the Free Software Foundation, Inc, 59 Temple Place - STE 330, Boston, MA 02111-1307, USA.
 
-	NTSC version ported to ReShade by DevilSingh with some help from guest(r), and updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
-
-	Parameters reorganized, PAL passes ported to ReShade, and relevant sections decoupled for more granular utility by Azurfel.
+	NTSC version ported to ReShade by DevilSingh with some help from guest(r).
+	NTSC version updated to crt-guest-advanced-2025-11-30-release1 by Jobima.
+	PAL passes ported to ReShade by Azurfel.
+	Updated to crt-guest-advanced-2026-07-23-release1 by Jobima and Azurfel.
+	Relevant sections decoupled for more granular utility by Azurfel.
 
 */
 
@@ -177,10 +183,37 @@ uniform float sega_fix <
 	ui_label = "Sega Brightness Fix";
 > = 0.0;
 
+uniform float segams <
+	ui_category = "Color Tweaks";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "Sega MS Blue Lift";
+> = 0.0;
+
+uniform float segapal <
+	ui_category = "Color Tweaks";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 1.0;
+	ui_step = 1.0;
+	ui_label = "Sega MD Pallete Fix";
+> = 0.0;
+
 uniform float BP <
 	ui_category = "Color Tweaks";
 	ui_type = "drag";
 	ui_min = -100.0;
+	ui_max = 0.0;
+	ui_step = 1.0;
+	ui_label = "Lower Black Level";
+> = 0.0;
+
+uniform float BP1 <
+	ui_category = "Color Tweaks";
+	ui_type = "drag";
+	ui_min = 0.0;
 	ui_max = 25.0;
 	ui_step = 1.0;
 	ui_label = "Raise Black Level";
@@ -411,6 +444,24 @@ uniform float pal_scale <
 	ui_label = "PAL Resolution: Scaling";
 > = 1.0;
 
+uniform float pal_chroma <
+	ui_category = "PAL Controls";
+	ui_type = "drag";
+	ui_min = 0.5;
+	ui_max = 2.5;
+	ui_step = 0.05;
+	ui_label = "PAL Resolution: Chroma Scaling/Bleed ";
+> = 1.0;
+
+uniform float pal_dith <
+	ui_category = "PAL Controls";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 0.5;
+	ui_step = 0.01;
+	ui_label = "PAL Resolution: De-dithering Booster ";
+> = 0.0;
+
 uniform float pal_ring <
 	ui_category = "PAL Controls";
 	ui_type = "drag";
@@ -557,6 +608,7 @@ uniform float spike <
 #define NewSize float4(BoxSize,1.0/BoxSize)
 #define fuxcoord (texcoord*1.00001)
 #define eps 1e-8
+#define wts float((bloomsamp < 0.5) ? -10.0 : -12.5)
 #define pii 3.14159265
 #define fracoord (fuxcoord*NewSize.xy)
 #define texCD(c,d) tex2Dlod(c,float4(d,0,0))
@@ -653,6 +705,23 @@ float3 pgc(float3 c)
 	float mc = max(max(c.r,c.g),c.b);
 	float mg = pow(mc, 1.0/pre_gc);
 	return c * mg/(mc + 1e-8);  
+}
+
+float contrast_sigmoid_inv(float imgColor, float cont, float pivot)
+{
+	cont = cont - 1.0; cont = cont*cont*cont;
+	float knee  = 1.0 / (1.0 + exp (cont *  pivot));
+	float shldr = 1.0 / (1.0 + exp (cont * (pivot - 1.0)));
+	imgColor = pivot - log(1.0 / (imgColor * (shldr - knee) + knee) - 1.0) / cont;
+	return imgColor;
+}
+
+float dist(float3 A,float3 B)
+{
+	float r=0.5*(A.r+B.r);
+	float3 d=A-B;
+	float3 c=float3(2.+r,4.,3.-r);
+	return sqrt(dot(c*d,d))/3.;
 }
 
 float3 plant(float3 tar,float r)
@@ -780,7 +849,7 @@ float4 AfterglowPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float b = bth/255.0;
 	float c = max(max(color0.r,color0.g),color0.b);
 	w = smoothstep(b, 2.0*b, c);
-	float3 result=lerp(max(lerp(cr,a,0.49+float3(PR,PG,PB))-1.25/255.0,0.0),cr,w);
+	float3 result=lerp(max(lerp(cr,a,0.49+float3(PR,PG,PB))-0.5/255.0,0.0),cr,w);
 	return float4(result,w);
 }
 
@@ -805,9 +874,16 @@ float4 PreShaderPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float w=1.0-aftrglow.w;
 	float l=length(aftrglow.rgb);
 	aftrglow.rgb=AS*w*normalize(pow(aftrglow.rgb+0.01,ST))*l;
-	float bp=w*BP/255.0;
+	float bp=w*BP1/255.0;
 	if(sega_fix>0.5) imgColor.rgb=imgColor.rgb*(255.0/239.0);
+	if(segams>0.5) { imgColor.b=(abs(imgColor.b - 0.375) < 0.125) ? 0.4078431372549019607843137254902 : imgColor.b; }
 	imgColor.rgb=min(imgColor.rgb,1.0);
+	if (segapal > 0.5) {
+	imgColor.r = contrast_sigmoid_inv(imgColor.r,2.578419881,0.520674); 
+	imgColor.g = contrast_sigmoid_inv(imgColor.g,2.578419881,0.520674); 
+	imgColor.b = contrast_sigmoid_inv(imgColor.b,2.578419881,0.520674); }
+   
+	imgColor.rgb = min(imgColor.rgb, 1.0);
 	float3 color=imgColor.rgb;
 	if(int(TNTC)==0) {color.rgb=imgColor.rgb;}else
 	{
@@ -887,10 +963,9 @@ float4 PreShaderPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	color=lerp(color,comp,m);
 	color=pow(max(color,0.0),1.0/p);
 	color=pgc(color);
-	if(BP>-0.5)color=color+aftrglow.rgb+bp;else
-	{
-	color=max(color+BP/255.0,0.0)/(1.0+BP/255.0*step(-BP/255.0,max(max(color.r,color.g),color.b)))+aftrglow.rgb;
-	}
+	float bp1 = min(BP, 0.0);
+	color = max(color + bp1/255.0, 0.0) / (1.0 + bp1/255.0*step(-bp1/255.0, max(max(color.r,color.g),color.b)));
+	color = color + aftrglow.rgb + bp;
 	color=min(color*pre_bb,1.0);
 	return float4(color,vignette(texcoord));
 }
@@ -961,8 +1036,8 @@ float4 Signal_2_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float3 res4=yuv1;
 	
 	float lum = yuv1.x;
-	float3 yuvd=float3(yuv1.x, texCD(PALDE_S03, vtex_c).zw);
-	if (DLINE<2.5){yuvd=rgb2yuv(texCD(PALDE_S0I, vtex_c - float2(0.0, OrgSize.w)).rgb); yuvd.x = lum;}
+	float3 yuvd=rgb2yuv(texCD(PALDE_S03, vtex_c - float2(0.0, OrgSize.w)).rgb); yuvd.x = lum;
+	if (DLINE>3.5){yuvd=yuv1;}
 	
 	int line=int(floor(vtex_c.y*OrgSize.y));
 	
@@ -976,13 +1051,13 @@ float4 Signal_2_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	yuv1 =mul(mix_m,yuv1);
 	yuv1.yz=yuv1.yz*uvmod;
 	
-	if (DLINE>0.5)
+	if (DLINE>1.5)
 	{
-	if(DLINE>4.5){uvmod=float2(-uvmod.x, -uvmod.y);} else uvmod=float2(uvmod.x, -uvmod.y); /* should these be in a single {}? */
+	if(DLINE>2.5){uvmod=float2(-uvmod.x, -uvmod.y);} else uvmod=float2(uvmod.x, -uvmod.y); /* should these be in a single {}? */
 	yuvd.yz=yuvd.yz*uvmod;
 	yuvd=mul(mix_m,yuvd);
 	yuvd.yz=yuvd.yz*uvmod;
-	if(DLINE==2.0||4.0||6.0){yuv1=lerp(yuv1, yuvd, 0.5);} else{yuv1.x=lerp(yuv1.x, yuvd.x, 0.5);} /* should the yuvd be yuvd1? we will see */
+	yuv1=lerp(yuv1, yuvd, 0.5);
 	}
 
 	if(PAL_FILT==4.0){yuv1=res4;}
@@ -998,30 +1073,30 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float4 CON_TYPE=float4(288.0f, 320.0f, 410.0f, 512.0f); /* not sure this works in reshade code? */
 
 	float luma_weight_pal_25[25]={
-   -0.016500,
-   -0.020218,
-   -0.025000,
-   -0.029469,
-   -0.033500,
-   -0.035062,
-   -0.038500,
-   -0.047562,
-   -0.062000,
-   -0.084469,
-   -0.110000,
-   -0.141719,
-   -0.158000,
-   -0.144031,
-   -0.082500,
-    0.063469,
-    0.250000,
-    0.460156,
-    0.650000,
-    0.749375,
-    0.820000,
-    0.915000,
-    0.990000,
-    0.995000,
+   -0.002029,
+   -0.005153,
+   -0.011795,
+   -0.018519,
+   -0.049249,
+   -0.085003,
+   -0.121754,
+   -0.155098,
+   -0.180556,
+   -0.193873,
+   -0.191327,
+   -0.170006,
+   -0.128046,
+   -0.064815,
+    0.018974,
+    0.121221,
+    0.238487,
+    0.366121,
+    0.498457,
+    0.629093,
+    0.751215,
+    0.857963,
+    0.942821,
+    0.995341,
     1.000000};
 	
 	float chroma_weight_pal_251[25]={
@@ -1052,44 +1127,63 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
     1.000000};
 	
 	float chroma_weight_pal_252[25]={
-    0.003980,
-    0.000820,
-   -0.005200,
-   -0.008950,
-   -0.006750,
-    0.001200,
-    0.007850,
-    0.009800,
-    0.004900,
-   -0.003800,
-   -0.010950,
-   -0.007600,
-    0.005900,
-    0.016300,
-    0.020100,
-   -0.022700,
-   -0.016500,
-    0.034000,
-    0.078000,
-    0.148000,
-    0.290000,
-    0.432000,	
-    0.652000,
-    0.840000,
-    1.000000};
+   -0.00100,
+   -0.00200,
+   -0.00300,
+   -0.00400,
+   -0.00550,
+   -0.00900,
+   -0.00550,
+   -0.00200,
+    0.00430,
+    0.00721,
+    0.01167,
+    0.02333,
+    0.06512,
+    0.09667,
+    0.19333,
+    0.30000,
+    0.37667,
+    0.48333,
+    0.56000,
+    0.66327,
+    0.72333,
+    0.86000,
+    0.91667,
+    0.97333,
+    1.00000};
 
 	const int TAPS_PAL=24;
 
 	float chroma_weight_pal_25[25]=chroma_weight_pal_251;
-	if (CHROMAF>1.5&&PAL_FILT<2.5){chroma_weight_pal_25=chroma_weight_pal_252;}
+	if (CHROMAF>1.5){chroma_weight_pal_25=chroma_weight_pal_252;}
 
 	float yres=CON_TYPE[int(PAL_FILT)-1];
 	float hres=(pal_res < 1.5)?yres:OrgSize.x;
-	float cres=yres/320.0;
+
+// De-dithering Booster code
+	float df = 1.0;
+   
+	if(pal_dith>0.005&&PAL_FILT<3.5)
+	{
+        float2 TexD=(floor(fuxcoord*OrgSize.xy)+0.5)*OrgSize.zw;
+        float2 xx=float2(OrgSize.z,0.0);
+        
+        float ca=texCD(PALDE_S04,TexD-xx-xx).a;
+        float c0=texCD(PALDE_S04,TexD-xx).a;
+        float c1=texCD(PALDE_S04,TexD).a;
+        float c2=texCD(PALDE_S04,TexD+xx).a;
+        float cb=texCD(PALDE_S04,TexD+xx+xx).a;
+        
+        float line0=smothstep(0.0075,0.0,min(abs(c1-c0),abs(c2-c1)));
+        float line1=max(smothstep(0.0075,0.0,min(abs(ca-c0),abs(c2-cb))), line0);
+        float line2=max(smothstep(0.0075,0.0,min(abs(ca-c2),abs(c0-cb))), line1);
+        df=1.0+(1.0-line2)*pal_dith;
+	}
 
 	float res=pal_scale;
 	float one_x=0.125/hres/res;
-	float one_y=0.250/hres/res/cres;
+	float one_y=0.250/hres/res/pal_chroma;
 
 	float3 signal=0.0; /* I'm not sure this should be here */
 
@@ -1098,7 +1192,6 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float3 tmps=wsum;
 	float offset=0.0;int i=0;
 	float3 dx=float3(one_x, one_y, 0.0); /* I'm not sure this should be here */
-	float mit=1.0;
 	float loop=24.0;
 	float3 xd=dx;
 
@@ -1118,12 +1211,20 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	if(pal_ring>0.05)
 	{
         float2 dx=float2(8.0*one_x/min(res,1.0),0.0);
+        float x1=texCD(PALDE_S04,tex_c-4.0*dx).a;
+        float x2=texCD(PALDE_S04,tex_c-3.0*dx).a;
         float a=texCD(PALDE_S04,tex_c-2.0*dx).a;
         float b=texCD(PALDE_S04,tex_c-    dx).a;
         float c=texCD(PALDE_S04,tex_c+2.0*dx).a;
+        float y1=texCD(PALDE_S04,tex_c+3.0*dx).a;
+        float y2=texCD(PALDE_S04,tex_c+4.0*dx).a;
         float d=texCD(PALDE_S04,tex_c+    dx).a;
         float e=texCD(PALDE_S04,tex_c       ).a;	  
-        signal.x = lerp(signal.x, clamp(signal.x, min(min(min(a,b),min(c,d)),e), max(max(max(a,b),max(c,d)),e)), pal_ring);
+        float a0 = min(min(a,x1),x2);
+        float a1 = max(max(a,x1),x2);
+        float c0 = min(min(c,y1),y2);
+        float c1 = max(max(c,y1),y2);
+        signal.x = lerp(signal.x, clamp(signal.x, min(min(min(a0,b),min(c0,d)),e), max(max(max(a1,b),max(c1,d)),e)), pal_ring);
 	}
 
 	signal.x=pow(max(signal.x, 0.0), 1.0/GCORR);
@@ -1213,8 +1314,10 @@ float4 PAL_TV1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targe
 	float3 cmin=1.0.xxx;
 	float xs=max(2.0*0.4, 1.0);
 	float hsharpness=HSHARPNESS*xs*filter_res;
-	xs=1.0/(2.0*LIGMA_H*LIGMA_H*xs*xs*filter_res*filter_res);
+	float LIGMA_H2 = LIGMA_H * HSHARPNESS;
+	xs=1.0/(2.0*LIGMA_H2*LIGMA_H2*xs*xs*filter_res*filter_res);
 	float sharp=crthd_h(hsharpness,xs) *S_SHARP;
+	float ksharp = -2.0*hsharpness*xs*sharp;	
 	float maxsharp=MAXS;
 	float FPR=hsharpness;
 	float FPRi=1.0/hsharpness;
@@ -1229,8 +1332,8 @@ float4 PAL_TV1_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targe
 	{
 	pixel=texCD(PALDE_S08,tex+n*dx).rgb;
 	w=crthd_h(n+f,xs)-sharp;
-	fpx=(abs(n+f)-FPR)*FPRi;
-	if(w<0.0)w=max(w,lerp(-maxsharp,0.0,pow(clamp(fpx,0.0,1.0),SHARP))); else
+	fpx=clamp((abs(n+f)-FPR)*FPRi, 0.0, 1.0);
+	if(w<0.0)w=max(ksharp*fpx, maxsharp * ksharp * (1.0-fpx*fpx)); else
 	{
 	cmax=max(cmax,pixel);cmin=min(cmin,pixel);sw=w*(dot(pixel,luma)+ts);
 	sp=max(max(pixel.r,pixel.g),pixel.b);

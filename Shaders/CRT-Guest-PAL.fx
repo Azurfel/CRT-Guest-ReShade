@@ -2957,8 +2957,8 @@ float4 ChromaticPS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	float3 cmask=one;
 	float3 dmask=one;
 	float3 emask=one;
-	float mwidths[16]={0.0,2.0,3.0,3.0,6.0,6.0,2.4,3.4,2.4,3.25,3.4,4.4,4.25,7.4,6.25,5.25};
-	float mwidth=mwidths[int(shadow_msk+1)]; // the +1 makes the transform to shadow mask setting behave correctly with the crt masks setting still including the negative numbered option as is the case upstream. is there a better way?
+	float mwidths[15]={2.0,3.0,3.0,6.0,6.0,2.4,3.4,2.4,3.25,3.4,4.4,4.25,7.4,6.25,5.25};
+	float mwidth=mwidths[int(shadow_msk)];
 	float mask_compensate=frac(mwidth);
 	float mwidth0 = mwidth;
 	if(shadow_msk> -0.5)

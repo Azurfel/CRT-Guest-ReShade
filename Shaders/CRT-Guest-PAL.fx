@@ -2473,7 +2473,7 @@ float4 Signal_3_PS(float4 position:SV_Position,float2 texcoord:TEXCOORD):SV_Targ
 	}
 
 	float res=pal_scale;
-	float one_x=0.125/hres/res;
+	float one_x=0.125/hres/res * df;
 	float one_y=0.250/hres/res/pal_chroma;
 
 	float3 signal=0.0; /* I'm not sure this should be here */

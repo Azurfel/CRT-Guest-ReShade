@@ -1514,9 +1514,8 @@ uniform float oimage <
 #define fracoord (fuxcoord*NewSize.xy)
 #define texCD(c,d) tex2Dlod(c,float4(d,0,0))
 #define LumSize float4(2.0*TexSize.x,1.0*TexSize.y,1.0/(2.0*TexSize.x),1.0/(1.0*TexSize.y))
-#define rgb_m float3x3(0.299,0.587,0.114,-0.14713,-0.28886,0.436,0.615,-0.51499,-0.10001)
-#define yuv_m float3x3(1.000,0.000,1.13983,1.000,-0.39465,-0.58060,1.000,2.03211,0.000)
-#define yiq_m float3x3(1.000,0.956,0.621,1.000,-0.272,-0.6474,1.000,-1.106,1.7046)
+#define rgb_m float3x3(0.29900,0.58700,0.11400,-0.14713,-0.28886,0.43600,0.61500,-0.51499,-0.10001)
+#define yuv_m float3x3(1.00000,0.00000,1.13983,1.00000,-0.39465,-0.58060,1.00000,2.03211,0.00000)
 #define fetch_offset1(dx)  texCD(PAL_S03,tex_c+dx).xyz+texCD(PAL_S03,tex_c-dx).xyz
 #define fetch_offset2(dx) float3(texCD(PAL_S03,tex_c+dx.xz).x+texCD(PAL_S03,tex_c-dx.xz).x,texCD(PAL_S03,tex_c+dx.yz).yz+texCD(PAL_S03,tex_c-dx.yz).yz)
 #define sample_yuv(dx) float3(texCD(PAL_S04,tex_c+dx.xz).x+texCD(PAL_S04,tex_c-dx.xz).x,texCD(PAL_S04,tex_c+dx.yz).yz+texCD(PAL_S04,tex_c-dx.yz).yz)
@@ -1760,16 +1759,6 @@ float3 gc1(float3 c)
 	float mc=max(max(c.r,c.g),c.b);
 	float mg=pow(mc,1.0/gamma_c);
 	return c*mg/(mc+eps);
-}
-
-float3 rgb2yiq(float3 r)
-{
-	return mul(rgb_m, r);
-}
-
-float3 yiq2rgb(float3 y)
-{
-	return mul(yiq_m, y);
 }
 
 float3 rgb2yuv(float3 r)

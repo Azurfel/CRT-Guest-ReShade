@@ -613,8 +613,8 @@ uniform float spike <
 #define fracoord (fuxcoord*NewSize.xy)
 #define texCD(c,d) tex2Dlod(c,float4(d,0,0))
 #define LumSize float4(2.0*TexSize.x,1.0*TexSize.y,1.0/(2.0*TexSize.x),1.0/(1.0*TexSize.y))
-#define rgb_m float3x3(0.299,0.587,0.114,-0.14713,-0.28886,0.436,0.615,-0.51499,-0.10001)
-#define yuv_m float3x3(1.000,0.000,1.13983,1.000,-0.39465,-0.58060,1.000,2.03211,0.000)
+#define rgb_m float3x3(0.29900,0.58700,0.11400,-0.14713,-0.28886,0.43600,0.61500,-0.51499,-0.10001)
+#define yuv_m float3x3(1.00000,0.00000,1.13983,1.00000,-0.39465,-0.58060,1.00000,2.03211,0.00000)
 #define sample_yuv(dx) float3(texCD(PALDE_S04,tex_c+dx.xz).x+texCD(PALDE_S04,tex_c-dx.xz).x,texCD(PALDE_S04,tex_c+dx.yz).yz+texCD(PALDE_S04,tex_c-dx.yz).yz)
 
 #ifndef Resolution_X

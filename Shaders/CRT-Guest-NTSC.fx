@@ -1558,8 +1558,8 @@ uniform float oimage <
 #define fracoord (fuxcoord*NewSize.xy)
 #define texCD(c,d) tex2Dlod(c,float4(d,0,0))
 #define LumSize float4(2.0*TexSize.x,1.0*TexSize.y,1.0/(2.0*TexSize.x),1.0/(1.0*TexSize.y))
-#define rgb_m float3x3(0.2989,0.587,0.114,0.5959,-0.2744,-0.3216,0.2115,-0.5229,0.3114)
-#define yiq_m float3x3(1.000,0.956,0.621,1.000,-0.272,-0.6474,1.000,-1.106,1.7046)
+#define rgb_m float3x3(0.2989,0.5870,0.1140,0.5959,-0.2744,-0.3216,0.2115,-0.5229,0.3114)
+#define yiq_m float3x3(1.0000,0.9560,0.6210,1.0000,-0.2720,-0.6474,1.0000,-1.1060,1.7046)
 #define fetch_offset1(dx)  texCD(NTSC_S03,tex_c+dx).xyz+texCD(NTSC_S03,tex_c-dx).xyz
 #define fetch_offset2(dx) float3(texCD(NTSC_S03,tex_c+dx.xz).x+texCD(NTSC_S03,tex_c-dx.xz).x,texCD(NTSC_S03,tex_c+dx.yz).yz+texCD(NTSC_S03,tex_c-dx.yz).yz)
 
